@@ -2,11 +2,11 @@
 
 A collaborative Kanban-style tool for labeling machine learning data samples — cards move from **Unlabeled → In Review → Labeled** as the team works through a dataset together.
 
-Built for [course/workshop name] by a 6-person team.
+Built for [course/workshop name] by a 7-person team.
 
 ## Status
 
-🚧 In active development — Sprint 1 (project scaffold) in progress.
+🚧 In active development — Sprint 2 (working REST API) in progress.
 
 ## Tech stack
 
@@ -31,6 +31,44 @@ cd server
 npm install
 npm run dev
 ```
+
+## API Contract
+
+Base URL (local dev): `http://localhost:5000`
+
+### Sample object shape
+
+```json
+{
+  "id": "1",
+  "content": "sample-image-1.jpg",
+  "type": "image",
+  "currentLabel": null,
+  "status": "Unlabeled",
+  "labeledBy": null,
+  "history": []
+}
+```
+
+- `content` — the sample itself: an image filename/URL, or raw text for text samples
+- `type` — `"image"` or `"text"`
+- `currentLabel` — the applied label, or `null` if unlabeled
+- `status` — `"Unlabeled"` | `"In Review"` | `"Labeled"` (mirrors the board's three columns)
+- `labeledBy` — user ID of whoever last labeled it, or `null`
+- `history` — array of past labeling actions, e.g. `{ "action": "labeled", "label": "positive", "by": "user123", "at": "2026-08-05T10:00:00Z" }`
+
+### Routes
+
+| Method | Route | Description | Status |
+|---|---|---|---|
+| GET | `/samples` | Returns all samples | ✅ working |
+| GET | `/samples/:id` | Returns one sample by id | 🚧 scaffolded, needs verification |
+| POST | `/samples` | Creates a new sample | 🚧 scaffolded, needs verification |
+| PATCH | `/samples/:id` | Updates a sample's label/status | 🚧 scaffolded, needs verification |
+| POST | `/auth/register` | Registers a new user | 🚧 in progress |
+| POST | `/auth/login` | Logs in, returns a JWT | 🚧 in progress |
+
+*Note: samples are currently served from in-memory/mock data — MongoDB persistence lands in Sprint 3.*
 
 ## Team workflow
 
