@@ -77,5 +77,4 @@ Base URL (local dev): `http://localhost:5000`
 - See the full sprint plan and task breakdown in `docs/team-work-plan.md` *(add this file once available)*
 
 ## License
-
 TBD
