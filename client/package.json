@@ -9,10 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies" : {
+{
+  "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
-  },
+  }
+}
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@rolldown/plugin-babel": "^0.2.3",
