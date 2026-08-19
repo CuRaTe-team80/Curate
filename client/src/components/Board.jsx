@@ -1,17 +1,35 @@
+import { useState, useEffect } from 'react';
 import Column from './Column';
 
-const mockSamples = [
-  { id: 1, name: 'Sample A', status: 'Unlabeled' },
-  { id: 2, name: 'Sample B', status: 'Unlabeled' },
-  { id: 3, name: 'Sample C', status: 'In Review' },
-  { id: 4, name: 'Sample D', status: 'Labeled' },
-  { id: 5, name: 'Sample E', status: 'Labeled' },
-];
+const API_URL = 'http://localhost:5000/samples';
 
 function Board() {
-  const unlabeled = mockSamples.filter((s) => s.status === 'Unlabeled');
-  const inReview = mockSamples.filter((s) => s.status === 'In Review');
-  const labeled = mockSamples.filter((s) => s.status === 'Labeled');
+  const [samples, setSamples] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch samples');
+        return res.json();
+      })
+      .then((data) => {
+        setSamples(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Loading samples...</p>;
+  if (error) return <p>Error loading samples: {error}</p>;
+
+  const unlabeled = samples.filter((s) => s.status === 'Unlabeled');
+  const inReview = samples.filter((s) => s.status === 'In Review');
+  const labeled = samples.filter((s) => s.status === 'Labeled');
 
   return (
     <div className="board">
