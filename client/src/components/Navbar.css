@@ -1,0 +1,24 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.navbar-brand { display: flex; align-items: center; gap: var(--space-2); }
+.navbar-logo { color: var(--color-primary); font-size: 1.25rem; }
+.navbar-name { font-weight: 700; font-size: var(--font-size-lg); }
+.navbar-links { display: flex; align-items: center; gap: var(--space-5); }
+.navbar-link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+.navbar-link:hover { color: var(--color-primary); }
+.navbar-cta { text-decoration: none; }
