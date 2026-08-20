@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Column from './Column';
+import './Board.css';
 
 const API_URL = 'http://localhost:5000/samples';
 
