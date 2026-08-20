@@ -1,13 +1,15 @@
 // client/src/components/LabelPicker.jsx
 import { useState } from "react";
-import "./LabelPicker.css";
 import ConflictBanner from "./ConflictBanner";
 
-// LabelPicker now sends a real PATCH request when a button is clicked.
-// sampleId is required so we know which sample to update.
-function LabelPicker({ sampleId }) {
-  const labels = ["Positive", "Negative", "Cat", "Dog"];
+const LABELS = [
+  { name: "Positive", icon: "\u2713", color: "var(--color-success)" },
+  { name: "Negative", icon: "\u2717", color: "var(--color-danger)" },
+  { name: "Cat", icon: "\uD83D\uDC31", color: "var(--color-accent)" },
+  { name: "Dog", icon: "\uD83D\uDC36", color: "var(--color-accent)" },
+];
 
+function LabelPicker({ sampleId }) {
   const [selectedLabel, setSelectedLabel] = useState(null);
   const [hasConflict, setHasConflict] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -24,8 +26,6 @@ function LabelPicker({ sampleId }) {
         body: JSON.stringify({ label }),
       });
 
-      // Assumes the API returns 409 when another user already labeled
-      // this sample differently in the meantime.
       if (response.status === 409) {
         setHasConflict(true);
         setIsSaving(false);
@@ -48,29 +48,49 @@ function LabelPicker({ sampleId }) {
   }
 
   return (
-    <div className="label-picker">
+    <div
+      style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}
+    >
       <ConflictBanner
         isVisible={hasConflict}
         onDismiss={() => setHasConflict(false)}
       />
 
-      {error && <p className="label-picker__error">{error}</p>}
+      {error && (
+        <p style={{ margin: 0, color: "var(--color-danger)" }}>{error}</p>
+      )}
 
-      <div className="label-picker__buttons">
-        {labels.map((label) => (
-          <button
-            key={label}
-            type="button"
-            disabled={isSaving}
-            className={
-              "label-picker__button" +
-              (selectedLabel === label ? " label-picker__button--active" : "")
-            }
-            onClick={() => handleLabelClick(label)}
-          >
-            {label}
-          </button>
-        ))}
+      <div
+        style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)" }}
+      >
+        {LABELS.map(({ name, icon, color }) => {
+          const isActive = selectedLabel === name;
+
+          return (
+            <button
+              key={name}
+              type="button"
+              disabled={isSaving}
+              className="btn"
+              onClick={() => handleLabelClick(name)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "var(--space-1)",
+                backgroundColor: isActive ? "var(--color-primary)" : "var(--color-surface)",
+                border: `1px solid ${isActive ? "var(--color-primary)" : color}`,
+                color: isActive ? "var(--color-surface)" : color,
+                opacity: isSaving ? 0.6 : 1,
+                cursor: isSaving ? "not-allowed" : "pointer",
+              }}
+            >
+              <span aria-hidden="true" style={{ fontSize: "0.9em" }}>
+                {icon}
+              </span>
+              {name}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
