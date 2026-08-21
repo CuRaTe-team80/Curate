@@ -9,7 +9,7 @@ const LABELS = [
   { name: "Dog", icon: "\uD83D\uDC36", color: "var(--color-accent)" },
 ];
 
-function LabelPicker({ sampleId }) {
+function LabelPicker({ sampleId, onSampleUpdate })  {
   const [selectedLabel, setSelectedLabel] = useState(null);
   const [hasConflict, setHasConflict] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -20,11 +20,11 @@ function LabelPicker({ sampleId }) {
     setError(null);
 
     try {
-      const response = await fetch(`/samples/${sampleId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ label }),
-      });
+     const response = await fetch(`http://localhost:5000/samples/${sampleId}`, {
+  method: "PATCH",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ currentLabel: label }),
+});
 
       if (response.status === 409) {
         setHasConflict(true);
@@ -36,10 +36,14 @@ function LabelPicker({ sampleId }) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
-      const data = await response.json();
+     const data = await response.json();
 
-      setSelectedLabel(data.label ?? label);
-      setHasConflict(false);
+setSelectedLabel(data.currentLabel ?? label);
+setHasConflict(false);
+
+if (onSampleUpdate) {
+  onSampleUpdate(data); // tell Board the sample's real data changed
+}
     } catch (err) {
       setError("Could not save label. Please try again.");
     } finally {

@@ -1,22 +1,17 @@
-// client/src/components/SampleCard.jsx
 import LabelPicker from "./LabelPicker";
 
-const mockSample = {
-  id: "sample-1",
-  type: "text", // could also be "image"
-  content: "The food arrived cold and the service was slow.",
-};
-
-function SampleCard() {
+function SampleCard({ sample, onClick, onSampleUpdate })  {
   return (
     <div
       className="card"
+      onClick={onClick}
       style={{
         width: "320px",
         padding: "var(--space-5)",
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-4)",
+        cursor: "pointer",
       }}
     >
       <div
@@ -31,9 +26,9 @@ function SampleCard() {
           borderRadius: "8px",
         }}
       >
-        {mockSample.type === "image" ? (
+        {sample.type === "image" ? (
           <img
-            src={mockSample.content}
+            src={sample.content}
             alt="Sample to label"
             style={{
               maxWidth: "100%",
@@ -51,12 +46,14 @@ function SampleCard() {
               lineHeight: 1.5,
             }}
           >
-            {mockSample.content}
+            {sample.content}
           </p>
         )}
       </div>
 
-      <LabelPicker sampleId={mockSample.id} />
+      <div onClick={(e) => e.stopPropagation()}>
+  <LabelPicker sampleId={sample.id} onSampleUpdate={onSampleUpdate} />
+</div>
     </div>
   );
 }
