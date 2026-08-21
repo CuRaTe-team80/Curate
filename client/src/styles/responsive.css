@@ -1,0 +1,17 @@
+/* Sprint 3: Responsive Breakpoints & Accessibility Adjustments */
+@media (max-width: 768px) {
+  .card, .column, .board-container {
+    padding: var(--space-2);
+    margin: var(--space-1);
+  }
+  
+  input, button {
+    font-size: 16px; /* Prevents auto-zoom on mobile inputs */
+  }
+}
+
+/* Basic Accessibility: Focus states & Contrast */
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
