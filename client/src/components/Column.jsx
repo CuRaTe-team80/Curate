@@ -1,4 +1,6 @@
-function Column({ title, samples }) {
+import SampleCard from "./SampleCard";
+
+function Column({ title, samples, onSelectSample, onSampleUpdate }) {
   const slug = title.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -15,9 +17,12 @@ function Column({ title, samples }) {
           </div>
         ) : (
           samples.map((sample) => (
-            <div key={sample.id} className="sample-placeholder">
-              {sample.content}
-            </div>
+            <SampleCard
+              key={sample.id}
+              sample={sample}
+              onClick={() => onSelectSample(sample)}
+              onSampleUpdate={onSampleUpdate}
+            />
           ))
         )}
       </div>
