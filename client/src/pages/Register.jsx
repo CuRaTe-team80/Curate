@@ -1,211 +1,119 @@
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useState, useContext } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import './authpages.css';
 
-const API_BASE_URL = "http://localhost:5000";
+export default function Register() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-const initialFormData = {
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
+  const { setToken, setUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-function Register() {
-  const { login } = useAuth();
+  function validate() {
+    const next = {};
+    if (!email.trim()) next.email = 'Email is required';
+    if (!password) next.password = 'Password is required';
+    else if (password.length < 6) next.password = 'Password must be at least 6 characters';
+    if (confirmPassword !== password) next.confirmPassword = 'Passwords do not match';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
 
-  const [formData, setFormData] = useState(initialFormData);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setServerError('');
+    if (!validate()) return;
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    setFormData((currentData) => ({
-      ...currentData,
-      [name]: value,
-    }));
-
-    setErrorMessage("");
-    setSuccessMessage("");
-  };
-
-  const validateForm = () => {
-    const email = formData.email.trim();
-    const password = formData.password;
-    const confirmPassword = formData.confirmPassword;
-
-    if (!email) {
-      return "Email address is required.";
-    }
-
-    if (!email.includes("@")) {
-      return "Please enter a valid email address.";
-    }
-
-    if (!password) {
-      return "Password is required.";
-    }
-
-    if (password.length < 6) {
-      return "Password must contain at least 6 characters.";
-    }
-
-    if (!confirmPassword) {
-      return "Please confirm your password.";
-    }
-
-    if (password !== confirmPassword) {
-      return "Passwords do not match.";
-    }
-
-    return "";
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const validationError = validateForm();
-
-    if (validationError) {
-      setErrorMessage(validationError);
-      return;
-    }
-
-    setIsSubmitting(true);
-    setErrorMessage("");
-    setSuccessMessage("");
-
+    setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email.trim(),
-          password: formData.password,
-        }),
+      const res = await fetch('/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+      const data = await res.json();
 
-      let data = {};
-
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("The server returned an invalid response.");
+      if (!res.ok) {
+        setServerError(data.error || 'Registration failed. Please try again.');
+        return;
       }
 
-      if (!response.ok) {
-        throw new Error(
-          data.message || "Unable to create your account. Please try again."
-        );
-      }
-
-      setSuccessMessage(
-        "Your account has been created successfully. You can now sign in."
-      );
-
-      /*
-       * If the backend returns a JWT immediately after registration,
-       * store it through AuthContext.
-       *
-       * If registration only creates the account, the user can
-       * continue to the Login page instead.
-       */
-      if (data.token) {
-        login(data.token);
-      }
-
-      setFormData(initialFormData);
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Something went wrong. Please try again."
-      );
+      setToken(data.token);
+      setUser(data.user);
+      navigate('/board');
+    } catch (err) {
+      setServerError('Could not reach the server. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <main>
-      <section aria-labelledby="register-title">
-        <header>
-          <h1 id="register-title">Create your account</h1>
-          <p>Join Curate and start managing your samples.</p>
-        </header>
+    <div className="auth-page">
+      <div className="card auth-card">
+        <h1 className="auth-title">Create your account</h1>
+        <p className="auth-subtitle">Join the team and start labeling samples.</p>
+
+        {serverError && (
+          <div className="auth-error-banner" role="alert">
+            {serverError}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} noValidate>
-          <div>
-            <label htmlFor="email">Email address</label>
-
+          <div className="input-group">
+            <label htmlFor="reg-email">Email</label>
             <input
-              id="email"
-              name="email"
+              id="reg-email"
+              className={`input ${errors.email ? 'input-error' : ''}`}
               type="email"
-              value={formData.email}
-              onChange={handleChange}
               placeholder="you@example.com"
-              autoComplete="email"
-              disabled={isSubmitting}
-              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
+            {errors.email && <span className="field-error">{errors.email}</span>}
           </div>
 
-          <div>
-            <label htmlFor="password">Password</label>
-
+          <div className="input-group">
+            <label htmlFor="reg-password">Password</label>
             <input
-              id="password"
-              name="password"
+              id="reg-password"
+              className={`input ${errors.password ? 'input-error' : ''}`}
               type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a password"
-              autoComplete="new-password"
-              disabled={isSubmitting}
-              required
-              minLength={6}
+              placeholder="At least 6 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+            {errors.password && <span className="field-error">{errors.password}</span>}
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword">Confirm password</label>
-
+          <div className="input-group">
+            <label htmlFor="confirm-password">Confirm Password</label>
             <input
-              id="confirmPassword"
-              name="confirmPassword"
+              id="confirm-password"
+              className={`input ${errors.confirmPassword ? 'input-error' : ''}`}
               type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
               placeholder="Re-enter your password"
-              autoComplete="new-password"
-              disabled={isSubmitting}
-              required
-              minLength={6}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
           </div>
 
-          {errorMessage && (
-            <div role="alert" aria-live="polite">
-              {errorMessage}
-            </div>
-          )}
-
-          {successMessage && (
-            <div role="status" aria-live="polite">
-              {successMessage}
-            </div>
-          )}
-
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Creating account..." : "Create account"}
+          <button className="btn btn-primary auth-submit" type="submit" disabled={loading}>
+            {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
-      </section>
-    </main>
+
+        <p className="auth-switch">
+          Already have an account? <Link to="/login">Log in</Link>
+        </p>
+      </div>
+    </div>
   );
 }
-
-export default Register;
