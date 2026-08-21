@@ -9,6 +9,15 @@
   top: 0;
   z-index: 10;
 }
+
+button.navbar-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
 .navbar-brand { display: flex; align-items: center; gap: var(--space-2); }
 .navbar-logo { color: var(--color-primary); font-size: 1.25rem; }
 .navbar-name { font-weight: 700; font-size: var(--font-size-lg); }
@@ -21,4 +30,10 @@
   transition: color var(--transition-fast);
 }
 .navbar-link:hover { color: var(--color-primary); }
+
+.navbar-link--active {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
 .navbar-cta { text-decoration: none; }
