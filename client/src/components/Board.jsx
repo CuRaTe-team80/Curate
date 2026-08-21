@@ -46,7 +46,6 @@ function Board() {
     );
   }
 
-  // Memoized filter logic
   const filteredSamples = useMemo(() => {
     return samples.filter((sample) => {
       const matchesSearch = (sample.content || "")
@@ -64,7 +63,6 @@ function Board() {
     });
   }, [samples, searchTerm, typeFilter, statusFilter]);
 
-  // Handle early UI states BEFORE returning main JSX
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
   if (samples.length === 0) return <EmptyState />;
