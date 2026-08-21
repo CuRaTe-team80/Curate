@@ -78,3 +78,15 @@
   margin-bottom: var(--space-2);
   opacity: 0.4;
 }
+.column-drag-over {
+  border-color: var(--color-primary);
+  background: var(--color-bg);
+}
+
+.sample-drag-wrapper {
+  cursor: grab;
+}
+
+.sample-drag-wrapper:active {
+  cursor: grabbing;
+}
