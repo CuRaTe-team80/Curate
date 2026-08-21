@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import Column from './Column';
+import LoadingState from './LoadingState';
+import EmptyState from './EmptyState';
+import ErrorState from './ErrorState';
 import './Board.css';
 
 const API_URL = 'http://localhost:5000/samples';
@@ -25,8 +28,11 @@ function Board() {
       });
   }, []);
 
-  if (loading) return <p>Loading samples...</p>;
-  if (error) return <p>Error loading samples: {error}</p>;
+  if (loading) return <LoadingState />;
+
+  if (error) return <ErrorState message={error} />;
+
+  if (samples.length === 0) return <EmptyState />;
 
   const unlabeled = samples.filter((s) => s.status === 'Unlabeled');
   const inReview = samples.filter((s) => s.status === 'In Review');
