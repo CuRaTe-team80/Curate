@@ -12,11 +12,7 @@ function Navbar({ currentView, onNavigate }) {
       "data-theme",
       dark ? "dark" : "light"
     );
-
-    localStorage.setItem(
-      "curate_theme",
-      dark ? "dark" : "light"
-    );
+    localStorage.setItem("curate_theme", dark ? "dark" : "light");
   }, [dark]);
 
   return (
@@ -26,10 +22,7 @@ function Navbar({ currentView, onNavigate }) {
         <span className="navbar-logo" aria-hidden="true">
           ◆
         </span>
-
-        <span className="navbar-name">
-          Curate
-        </span>
+        <span className="navbar-name">Curate</span>
       </div>
 
       {/* Navigation */}
@@ -37,21 +30,16 @@ function Navbar({ currentView, onNavigate }) {
         <button
           type="button"
           className={`navbar-link${
-            currentView === "board"
-              ? " navbar-link--active"
-              : ""
+            currentView === "board" ? " navbar-link--active" : ""
           }`}
           onClick={() => onNavigate("board")}
         >
           Board
         </button>
-
         <button
           type="button"
           className={`navbar-link${
-            currentView === "dashboard"
-              ? " navbar-link--active"
-              : ""
+            currentView === "dashboard" ? " navbar-link--active" : ""
           }`}
           onClick={() => onNavigate("dashboard")}
         >
@@ -63,21 +51,13 @@ function Navbar({ currentView, onNavigate }) {
           type="button"
           className="btn btn-secondary theme-toggle"
           onClick={() => setDark((d) => !d)}
-          aria-label={
-            dark
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
-          title={
-            dark
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
+          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+          title={dark ? "Switch to light mode" : "Switch to dark mode"}
         >
           {dark ? "☀" : "☾"}
         </button>
 
-        <UserMenu />
+        <UserMenu onNavigate={onNavigate} />
       </div>
     </nav>
   );
