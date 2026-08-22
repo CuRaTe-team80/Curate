@@ -126,3 +126,37 @@ p { margin: 0 0 var(--space-3) 0; color: var(--color-text-muted); line-height: 1
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.12);
 }
+
+
+/* Dark mode overrides — toggled via data-theme="dark" on <html> */
+[data-theme="dark"] {
+  --color-primary: #2bb8c4;
+  --color-primary-light: #4fd0db;
+  --color-primary-dark: #1c8f99;
+  --color-accent: #f4a259;
+
+  --color-bg: #10191a;
+  --color-surface: #182525;
+  --color-border: #2a3a3b;
+
+  --color-text: #eef4f4;
+  --color-text-muted: #9fb3b3;
+  --color-text-inverse: #10191a;
+
+  --color-success: #3fbf78;
+  --color-warning: #e0a83f;
+  --color-danger: #e2635a;
+
+  --color-unlabeled: #6b8080;
+  --color-in-review: #e0a83f;
+  --color-labeled: #3fbf78;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
