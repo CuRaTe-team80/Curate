@@ -1,6 +1,17 @@
+import { useState, useEffect } from 'react';
+import UserMenu from './UserMenu';
 import './Navbar.css';
 
 function Navbar({ currentView, onNavigate }) {
+  const [dark, setDark] = useState(() => {
+    return localStorage.getItem('curate_theme') === 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('curate_theme', dark ? 'dark' : 'light');
+  }, [dark]);
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -22,8 +33,15 @@ function Navbar({ currentView, onNavigate }) {
         >
           Dashboard
         </button>
-        <a href="/login" className="navbar-link">Login</a>
-        <a href="/register" className="btn btn-primary navbar-cta">Get started</a>
+        <button
+          type="button"
+          className="btn btn-secondary theme-toggle"
+          onClick={() => setDark((d) => !d)}
+          aria-label="Toggle dark mode"
+        >
+          {dark ? '☀' : '☾'}
+        </button>
+        <UserMenu />
       </div>
     </nav>
   );
