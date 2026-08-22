@@ -21,9 +21,10 @@ function Board() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+
   const { loadCache, clearCache } = useLocalCache('board_state', samples);
 
-    useEffect(() => {
+  useEffect(() => {
     // Try restoring from cache first, so the board isn't blank on refresh
     const cached = loadCache();
     if (cached && cached.length > 0) {
@@ -50,7 +51,6 @@ function Board() {
         setLoading(false);
       });
   }, []);
- 
 
   function handleSampleUpdate(updatedSample) {
     setSamples((prev) =>
