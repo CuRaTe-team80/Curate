@@ -10,11 +10,12 @@ const LABELS = [
   { name: "Dog", icon: "\uD83D\uDC36", color: "var(--color-accent)" },
 ];
 
-function LabelPicker({ sampleId, onSampleUpdate }) {
+function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
   const { showToast } = useToast();
 
   const [selectedLabel, setSelectedLabel] = useState(null);
-  const [hasConflict, setHasConflict] = useState(false);
+  const [conflictSample, setConflictSample] = useState(null);
+  const [lastKnownUpdatedAt, setLastKnownUpdatedAt] = useState(sampleUpdatedAt);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -28,12 +29,16 @@ function LabelPicker({ sampleId, onSampleUpdate }) {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ currentLabel: label }),
+          body: JSON.stringify({
+            currentLabel: label,
+            clientUpdatedAt: lastKnownUpdatedAt,
+          }),
         }
       );
 
       if (response.status === 409) {
-        setHasConflict(true);
+        const data = await response.json();
+        setConflictSample(data.currentSample);
         setIsSaving(false);
         return;
       }
@@ -45,7 +50,8 @@ function LabelPicker({ sampleId, onSampleUpdate }) {
       const data = await response.json();
 
       setSelectedLabel(data.currentLabel ?? label);
-      setHasConflict(false);
+      setLastKnownUpdatedAt(data.updatedAt);
+      setConflictSample(null);
 
       showToast("Label saved", "success");
 
@@ -60,6 +66,16 @@ function LabelPicker({ sampleId, onSampleUpdate }) {
     }
   }
 
+  function handleRefresh() {
+    if (!conflictSample) return;
+    setSelectedLabel(conflictSample.currentLabel ?? null);
+    setLastKnownUpdatedAt(conflictSample.updatedAt);
+    setConflictSample(null);
+    if (onSampleUpdate) {
+      onSampleUpdate(conflictSample);
+    }
+  }
+
   return (
     <div
       style={{
@@ -69,8 +85,8 @@ function LabelPicker({ sampleId, onSampleUpdate }) {
       }}
     >
       <ConflictBanner
-        isVisible={hasConflict}
-        onDismiss={() => setHasConflict(false)}
+        isVisible={Boolean(conflictSample)}
+        onRefresh={handleRefresh}
       />
 
       {error && (
@@ -113,10 +129,7 @@ function LabelPicker({ sampleId, onSampleUpdate }) {
                 cursor: isSaving ? "not-allowed" : "pointer",
               }}
             >
-              <span
-                aria-hidden="true"
-                style={{ fontSize: "0.9em" }}
-              >
+              <span aria-hidden="true" style={{ fontSize: "0.9em" }}>
                 {icon}
               </span>
               {name}
