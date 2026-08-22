@@ -1,38 +1,30 @@
 // client/src/components/ConflictBanner.jsx
 
-function ConflictBanner({ isVisible, onDismiss }) {
+// Displays a warning banner when the API reports a labeling conflict
+// (a 409 response — see server/routes/samples.js), with a button to
+// reload the latest data so the user isn't stuck looking at stale state.
+function ConflictBanner({ isVisible, onRefresh }) {
   if (!isVisible) {
     return null;
   }
 
   return (
-    <div
-      role="alert"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "var(--space-3)",
-        padding: "var(--space-3) var(--space-4)",
-        backgroundColor: "var(--color-bg)",
-        border: "1px solid var(--color-danger)",
-        borderLeftWidth: "var(--space-1)",
-        borderRadius: "8px",
-      }}
-    >
-      <span aria-hidden="true" style={{ color: "var(--color-danger)", fontSize: "1.1em" }}>
+    <div className="conflict-banner" role="alert">
+      <span className="conflict-banner__icon" aria-hidden="true">
         &#9888;
       </span>
-      <span style={{ flex: 1, margin: 0, color: "var(--color-text)" }}>
-        This sample was already labeled by someone else. Please refresh and
-        try again.
+
+      <span className="conflict-banner__text">
+        This sample was updated by someone else. Your view is out of date —
+        refresh to see the latest version before making changes.
       </span>
+
       <button
         type="button"
-        className="btn btn-secondary"
-        onClick={onDismiss}
-        style={{ flexShrink: 0 }}
+        className="btn conflict-banner__refresh"
+        onClick={onRefresh}
       >
-        Dismiss
+        Refresh
       </button>
     </div>
   );
