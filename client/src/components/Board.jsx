@@ -6,6 +6,7 @@ import LoadingState from './LoadingState';
 import EmptyState from './EmptyState';
 import ErrorState from './ErrorState';
 import './Board.css';
+import { useLocalCache } from '../hooks/useLocalCache';
 
 const API_URL = 'http://localhost:5000/samples';
 const COLUMNS = ["Unlabeled", "In Review", "Labeled"];
@@ -20,8 +21,16 @@ function Board() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const { loadCache, clearCache } = useLocalCache('board_state', samples);
 
-  useEffect(() => {
+    useEffect(() => {
+    // Try restoring from cache first, so the board isn't blank on refresh
+    const cached = loadCache();
+    if (cached && cached.length > 0) {
+      setSamples(cached);
+      setLoading(false);
+    }
+
     fetch(API_URL)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch samples');
@@ -30,12 +39,18 @@ function Board() {
       .then((data) => {
         setSamples(data);
         setLoading(false);
+        setError(null);
+        clearCache(); // fresh data confirmed, drop the fallback
       })
       .catch((err) => {
-        setError(err.message);
+        // If we already restored cached data, don't wipe the board with an error screen
+        if (!cached) {
+          setError(err.message);
+        }
         setLoading(false);
       });
   }, []);
+ 
 
   function handleSampleUpdate(updatedSample) {
     setSamples((prev) =>
