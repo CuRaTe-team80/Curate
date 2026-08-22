@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
 import './UserMenu.css';
 
 // Decodes the payload of a JWT without verifying it — safe here because
@@ -44,9 +43,9 @@ export default function UserMenu() {
 
   if (!isAuthenticated || !user) {
     return (
-      <Link to="/login" className="user-menu-login-link">
+      <a href="/login" className="user-menu-login-link">
         Log in
-      </Link>
+      </a>
     );
   }
 
@@ -66,7 +65,6 @@ export default function UserMenu() {
         {user.email}
         <span className="user-menu-caret">▾</span>
       </button>
-
       {open && (
         <div className="user-menu-dropdown" role="menu">
           <button className="user-menu-item" role="menuitem" onClick={handleLogout}>
