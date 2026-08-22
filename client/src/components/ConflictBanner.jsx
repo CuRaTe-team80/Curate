@@ -1,8 +1,9 @@
 // client/src/components/ConflictBanner.jsx
 
+import "./ConflictBanner.css";
+
 // Displays a warning banner when the API reports a labeling conflict
-// (a 409 response — see server/routes/samples.js), with a button to
-// reload the latest data so the user isn't stuck looking at stale state.
+// (a 409 response), with a button to reload the latest data.
 function ConflictBanner({ isVisible, onRefresh }) {
   if (!isVisible) {
     return null;

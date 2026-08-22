@@ -1,0 +1,25 @@
+.conflict-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-danger);
+  border-left-width: var(--space-1);
+  border-radius: 8px;
+}
+
+.conflict-banner__icon {
+  color: var(--color-danger);
+  font-size: 1.1em;
+}
+
+.conflict-banner__text {
+  flex: 1;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.conflict-banner__refresh {
+  flex-shrink: 0;
+}
