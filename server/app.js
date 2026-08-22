@@ -8,5 +8,9 @@ app.use(express.json());
 const samplesRouter = require('./routes/samples');
 app.use('/samples', samplesRouter);
 
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+
 app.get('/', (req, res) => res.send('Curate API running'));
+
 module.exports = app;
