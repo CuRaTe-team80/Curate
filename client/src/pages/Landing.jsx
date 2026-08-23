@@ -1,6 +1,6 @@
 import './Landing.css';
 
-function Landing({ onGetStarted }) {
+function Landing({ onGetStarted, onNavigate }) {
   return (
     <section className="landing">
       <div className="landing-hero">
@@ -19,7 +19,9 @@ function Landing({ onGetStarted }) {
               Open the board
               <span className="btn-arrow">→</span>
             </button>
-            <a href="/register" className="btn btn-secondary btn-lg">Create an account</a>
+            <button className="btn btn-secondary btn-lg" onClick={() => onNavigate && onNavigate('register')}>
+              Create an account
+            </button>
           </div>
           <div className="landing-stats">
             <div className="stat">
@@ -104,9 +106,3 @@ function Landing({ onGetStarted }) {
           <h3>Built for teams</h3>
           <p>Real-time sync so nobody re-labels what's already done.</p>
         </div>
-      </div>
-    </section>
-  );
-}
-
-export default Landing;
