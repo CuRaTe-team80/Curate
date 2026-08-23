@@ -28,6 +28,8 @@ export default function UserMenu({ onNavigate }) {
     return decodeJwtPayload(token);
   }, [token]);
 
+  const initial = user?.email ? user.email.charAt(0).toUpperCase() : '?';
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -63,11 +65,16 @@ export default function UserMenu({ onNavigate }) {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        {user.email}
+        <span className="user-avatar" aria-hidden="true">{initial}</span>
+        <span className="user-menu-email">{user.email}</span>
         <span className="user-menu-caret">▾</span>
       </button>
       {open && (
         <div className="user-menu-dropdown" role="menu">
+          <div className="user-menu-dropdown__header">
+            <span className="user-avatar user-avatar--lg" aria-hidden="true">{initial}</span>
+            <span className="user-menu-dropdown__email">{user.email}</span>
+          </div>
           <button className="user-menu-item" role="menuitem" onClick={handleLogout}>
             Logout
           </button>
