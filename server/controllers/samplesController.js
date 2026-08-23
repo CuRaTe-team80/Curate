@@ -1,51 +1,3 @@
-const Sample = require('../models/Sample');
-
-const getAllSamples = async (req, res) => {
-  try {
-    const samples = await Sample.find();
-    res.status(200).json(samples);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch samples' });
-  }
-};
-
-const getSampleById = async (req, res) => {
-  try {
-    const sample = await Sample.findById(req.params.id);
-    if (!sample) {
-      return res.status(404).json({ message: 'Sample not found' });
-    }
-    res.status(200).json(sample);
-  } catch (err) {
-    res.status(404).json({ message: 'Sample not found' });
-  }
-};
-
-const createSample = async (req, res) => {
-  const { content, type } = req.body;
-  if (!content || !type) {
-    return res.status(400).json({ message: 'content and type are required' });
-  }
-  try {
-    const newSample = await Sample.create({
-      content,
-      type,
-      currentLabel: null,
-      status: 'Unlabeled',
-      labeledBy: null,
-      history: [],
-    });
-    res.status(201).json(newSample);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to create sample' });
-  }
-};
-
-// PATCH /samples/:id
-// Expects clientUpdatedAt — the updatedAt timestamp the client had when it
-// last fetched this sample. If the sample changed in the database since
-// then, someone else edited it first, so we reject with 409 instead of
-// silently overwriting their change.
 const updateSample = async (req, res) => {
   try {
     const sample = await Sample.findById(req.params.id);
@@ -80,6 +32,13 @@ const updateSample = async (req, res) => {
     }
 
     await sample.save();
+
+    // Notify every connected client that this sample changed
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('sampleUpdated', sample);
+    }
+
     res.status(200).json(sample);
   } catch (err) {
     if (err.name === 'CastError') {
@@ -88,5 +47,3 @@ const updateSample = async (req, res) => {
     res.status(404).json({ message: 'Sample not found' });
   }
 };
-
-module.exports = { getAllSamples, getSampleById, createSample, updateSample };

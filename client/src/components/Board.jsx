@@ -11,12 +11,7 @@ import { useSocket } from '../hooks/useSocket';
 import { useToast } from '../context/ToastContext';
 
 const API_URL = 'http://localhost:5000/samples';
-
-const COLUMNS = [
-  'Unlabeled',
-  'In Review',
-  'Labeled',
-];
+const COLUMNS = ['Unlabeled', 'In Review', 'Labeled'];
 
 function Board() {
   const [samples, setSamples] = useState([]);
@@ -32,24 +27,17 @@ function Board() {
   const [statusFilter, setStatusFilter] = useState('All');
 
   // Client-side persistence
-  const {
-    loadCache,
-    clearCache,
-  } = useLocalCache('board_state', samples);
+  const { loadCache, clearCache } = useLocalCache('board_state', samples);
 
   // Handle sample updates from local actions and Socket.io
   const handleSampleUpdate = useCallback((updatedSample) => {
     setSamples((previousSamples) =>
       previousSamples.map((sample) =>
-        sample.id === updatedSample.id
-          ? updatedSample
-          : sample
+        sample.id === updatedSample.id ? updatedSample : sample
       )
     );
-
     setSelectedSample((previousSelectedSample) =>
-      previousSelectedSample &&
-      previousSelectedSample.id === updatedSample.id
+      previousSelectedSample && previousSelectedSample.id === updatedSample.id
         ? updatedSample
         : previousSelectedSample
     );
@@ -57,8 +45,8 @@ function Board() {
 
   // Fetch samples and restore cached board state
   useEffect(() => {
+    // Try restoring from cache first, so the board isn't blank on refresh
     const cached = loadCache();
-
     if (cached && cached.length > 0) {
       setSamples(cached);
       setLoading(false);
@@ -69,23 +57,19 @@ function Board() {
         if (!response.ok) {
           throw new Error('Failed to fetch samples');
         }
-
         return response.json();
       })
       .then((data) => {
         setSamples(data);
         setLoading(false);
         setError(null);
-
-        // Fresh server data is available
-        clearCache();
+        clearCache(); // fresh server data confirmed, drop the fallback
       })
       .catch((fetchError) => {
         // Keep cached board visible if the API is temporarily unavailable
         if (!cached || cached.length === 0) {
           setError(fetchError.message);
         }
-
         setLoading(false);
       });
   }, [loadCache, clearCache]);
@@ -102,42 +86,18 @@ function Board() {
 
       const matchesType =
         typeFilter === 'All' ||
-        (
-          sample.type &&
-          sample.type.toLowerCase() === typeFilter.toLowerCase()
-        );
+        (sample.type && sample.type.toLowerCase() === typeFilter.toLowerCase());
 
       const matchesStatus =
-        statusFilter === 'All' ||
-        sample.status === statusFilter;
+        statusFilter === 'All' || sample.status === statusFilter;
 
-      return (
-        matchesSearch &&
-        matchesType &&
-        matchesStatus
-      );
+      return matchesSearch && matchesType && matchesStatus;
     });
-  }, [
-    samples,
-    searchTerm,
-    typeFilter,
-    statusFilter,
-  ]);
+  }, [samples, searchTerm, typeFilter, statusFilter]);
 
-  // Loading state
-  if (loading) {
-    return <LoadingState />;
-  }
-
-  // Error state
-  if (error) {
-    return <ErrorState message={error} />;
-  }
-
-  // Empty state
-  if (samples.length === 0) {
-    return <EmptyState />;
-  }
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState message={error} />;
+  if (samples.length === 0) return <EmptyState />;
 
   return (
     <div className="board">
@@ -150,12 +110,7 @@ function Board() {
         onStatusFilterChange={setStatusFilter}
       />
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 'var(--space-5)',
-        }}
-      >
+      <div style={{ display: 'flex', gap: 'var(--space-5)' }}>
         {COLUMNS.map((columnStatus) => (
           <Column
             key={columnStatus}
@@ -170,10 +125,7 @@ function Board() {
         ))}
       </div>
 
-      <SampleDetail
-        sample={selectedSample}
-        onClose={() => setSelectedSample(null)}
-      />
+      <SampleDetail sample={selectedSample} onClose={() => setSelectedSample(null)} />
     </div>
   );
 }

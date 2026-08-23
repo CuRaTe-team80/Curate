@@ -13,16 +13,11 @@ export function useSocket(onSampleUpdated, showToast) {
 
     socket.on('sampleUpdated', (updatedSample) => {
       console.log('Live sample update received:', updatedSample);
-
       if (onSampleUpdated) {
         onSampleUpdated(updatedSample);
       }
-
       if (showToast) {
-        showToast(
-          'A sample was updated by another user.',
-          'success'
-        );
+        showToast('A sample was updated by another user.', 'success');
       }
     });
 
