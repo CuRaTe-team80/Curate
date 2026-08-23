@@ -19,7 +19,7 @@ function App() {
         <div className="app">
           <Navbar currentView={view} onNavigate={setView} />
           {view === 'landing' && (
-            <Landing onGetStarted={() => setView('board')} />
+            <Landing onGetStarted={() => setView('board')} onNavigate={setView} />
           )}
           {view === 'board' && <Board />}
           {view === 'dashboard' && <Dashboard />}
