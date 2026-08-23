@@ -2,6 +2,7 @@ import './App.css'
 import './styles/theme.css'
 import './styles/enhance.css'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import Landing from './pages/Landing'
 import Board from './components/Board'
 import Dashboard from './pages/Dashboard'
@@ -26,6 +27,7 @@ function App() {
           {view === 'dashboard' && <Dashboard />}
           {view === 'login' && <Login onSuccess={() => setView('board')} />}
           {view === 'register' && <Register onSuccess={() => setView('board')} />}
+          <Footer />
           <Toast />
         </div>
       </ToastProvider>
