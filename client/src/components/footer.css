@@ -1,0 +1,63 @@
+.footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  margin-top: auto;
+  padding: var(--space-6) var(--space-5) var(--space-5);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.footer-content {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.footer-logo {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+.footer-name {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.footer-tagline {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+}
+.footer-links a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.footer-links a:hover {
+  color: var(--color-primary-light);
+}
+.footer-divider {
+  color: var(--color-border);
+}
+
+.footer-copyright {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  margin: var(--space-3) 0 0;
+}
