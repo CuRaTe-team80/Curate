@@ -1,5 +1,6 @@
 import './App.css'
 import './styles/theme.css'
+import './styles/enhance.css'
 import Navbar from './components/Navbar'
 import Landing from './pages/Landing'
 import Board from './components/Board'
