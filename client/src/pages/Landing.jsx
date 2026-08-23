@@ -1,4 +1,4 @@
-import './Landing.css';
+﻿import './Landing.css';
 
 function Landing({ onGetStarted, onNavigate }) {
   return (
@@ -10,14 +10,14 @@ function Landing({ onGetStarted, onNavigate }) {
             Label data together,<br />without losing the truth.
           </h1>
           <p className="landing-sub">
-            Curate turns your dataset into a shared Kanban board — samples flow from
+            Curate turns your dataset into a shared Kanban board - samples flow from
             Unlabeled to In Review to Labeled, with live conflict detection when two
             people disagree.
           </p>
           <div className="landing-actions">
             <button className="btn btn-primary btn-lg" onClick={onGetStarted}>
               Open the board
-              <span className="btn-arrow">→</span>
+              <span className="btn-arrow">-&gt;</span>
             </button>
             <button className="btn btn-secondary btn-lg" onClick={() => onNavigate && onNavigate('register')}>
               Create an account
@@ -85,7 +85,7 @@ function Landing({ onGetStarted, onNavigate }) {
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </div>
-          <h3>Unlabeled → Labeled</h3>
+          <h3>Unlabeled -&gt; Labeled</h3>
           <p>A clear three-column pipeline every sample moves through.</p>
         </div>
         <div className="card feature-card">
@@ -106,3 +106,9 @@ function Landing({ onGetStarted, onNavigate }) {
           <h3>Built for teams</h3>
           <p>Real-time sync so nobody re-labels what's already done.</p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export default Landing;
