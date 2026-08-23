@@ -1,3 +1,49 @@
+const Sample = require('../models/Sample'); // Ensure path matches your model
+
+// GET /api/samples
+const getAllSamples = async (req, res) => {
+  try {
+    const samples = await Sample.find({});
+    res.status(200).json(samples);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error fetching samples', error: err.message });
+  }
+};
+
+// GET /api/samples/:id
+const getSampleById = async (req, res) => {
+  try {
+    const sample = await Sample.findById(req.params.id);
+    if (!sample) {
+      return res.status(404).json({ message: 'Sample not found' });
+    }
+    res.status(200).json(sample);
+  } catch (err) {
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid sample id.' });
+    }
+    res.status(500).json({ message: 'Server error fetching sample', error: err.message });
+  }
+};
+
+// POST /api/samples
+const createSample = async (req, res) => {
+  try {
+    const newSample = new Sample(req.body);
+    const savedSample = await newSample.save();
+
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('sampleCreated', savedSample);
+    }
+
+    res.status(201).json(savedSample);
+  } catch (err) {
+    res.status(400).json({ message: 'Error creating sample', error: err.message });
+  }
+};
+
+// PATCH /api/samples/:id
 const updateSample = async (req, res) => {
   try {
     const sample = await Sample.findById(req.params.id);
@@ -44,6 +90,13 @@ const updateSample = async (req, res) => {
     if (err.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid sample id.' });
     }
-    res.status(404).json({ message: 'Sample not found' });
+    res.status(500).json({ message: 'Error updating sample', error: err.message });
   }
+};
+
+module.exports = {
+  getAllSamples,
+  getSampleById,
+  createSample,
+  updateSample,
 };
