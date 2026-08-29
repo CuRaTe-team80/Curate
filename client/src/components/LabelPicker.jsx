@@ -25,7 +25,7 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/samples/${sampleId}`,
+        `${import.meta.env.VITE_API_URL}/samples/${sampleId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
