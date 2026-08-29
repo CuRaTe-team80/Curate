@@ -10,7 +10,7 @@ import { useLocalCache } from '../hooks/useLocalCache';
 import { useSocket } from '../hooks/useSocket';
 import { useToast } from '../context/ToastContext';
 
-const API_URL = 'http://localhost:5000/samples';
+const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/samples`;
 const COLUMNS = ['Unlabeled', 'In Review', 'Labeled'];
 
 function Board() {
