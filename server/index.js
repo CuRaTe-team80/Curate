@@ -6,6 +6,7 @@ const initSockets = require('./sockets');
 
 const PORT = process.env.PORT || 5000;
 
+// Connect to MongoDB
 connectDB();
 
 const server = http.createServer(app);
