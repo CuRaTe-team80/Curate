@@ -1,8 +1,39 @@
-﻿import './Landing.css';
+﻿import React, { useState } from 'react'
+import './Landing.css'
 
 function Landing({ onGetStarted, onNavigate }) {
+  const [activeStep, setActiveStep] = useState(0)
+
+  const steps = [
+    {
+      id: 'import',
+      badge: 'Step 1',
+      title: 'Import & Auto-Queue',
+      description: 'Upload raw datasets via CSV, JSON, or API. Unlabeled samples populate the queue automatically.',
+      previewTag: 'Unlabeled (120 samples)',
+      previewColor: 'var(--color-unlabeled)'
+    },
+    {
+      id: 'review',
+      badge: 'Step 2',
+      title: 'Collaborative Review & Conflict Check',
+      description: 'Team members annotate simultaneously. If two annotators submit conflicting labels, Curate flags it instantly.',
+      previewTag: 'In Review (⚠️ Conflict Detected)',
+      previewColor: 'var(--color-in-review)'
+    },
+    {
+      id: 'export',
+      badge: 'Step 3',
+      title: 'Export Verified Truth',
+      description: 'Consolidated, verified ground truth labels are ready for model training with zero silent overwrites.',
+      previewTag: 'Labeled (Ready for Export)',
+      previewColor: 'var(--color-labeled)'
+    }
+  ]
+
   return (
     <section className="landing">
+      {/* Existing Hero Section */}
       <div className="landing-hero">
         <div className="landing-hero-text">
           <span className="landing-eyebrow">For teams labeling ML data</span>
@@ -78,6 +109,7 @@ function Landing({ onGetStarted, onNavigate }) {
         </div>
       </div>
 
+      {/* Feature Cards */}
       <div className="landing-features">
         <div className="card feature-card">
           <div className="feature-icon icon-teal">
@@ -107,8 +139,44 @@ function Landing({ onGetStarted, onNavigate }) {
           <p>Real-time sync so nobody re-labels what's already done.</p>
         </div>
       </div>
+
+      {/* NEW SECTION: How It Works Interactive Preview */}
+      <div className="how-it-works">
+        <div className="section-header">
+          <span className="landing-eyebrow">Workflow</span>
+          <h2>How Curate Streamlines Annotation</h2>
+        </div>
+
+        <div className="how-it-works-grid">
+          <div className="steps-list">
+            {steps.map((step, idx) => (
+              <div
+                key={step.id}
+                className={`step-item ${activeStep === idx ? 'step-item--active' : ''}`}
+                onClick={() => setActiveStep(idx)}
+              >
+                <span className="step-badge">{step.badge}</span>
+                <h4>{step.title}</h4>
+                <p>{step.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="step-preview-card card">
+            <div className="preview-status-indicator" style={{ borderColor: steps[activeStep].previewColor }}>
+              <span className="preview-status-dot" style={{ background: steps[activeStep].previewColor }} />
+              <span>{steps[activeStep].previewTag}</span>
+            </div>
+            <div className="preview-content-placeholder">
+              <div className="preview-line long" />
+              <div className="preview-line medium" />
+              <div className="preview-line short" />
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
-  );
+  )
 }
 
-export default Landing;
+export default Landing
