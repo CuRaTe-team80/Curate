@@ -135,6 +135,26 @@ body {
   }
 }
 
+/* Hero Feature Highlights */
+.hero-highlights {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.highlight-pill {
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary-light);
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+}
+
 /* ================= FEATURE CARDS & LINKS ================= */
 #next-steps {
   display: flex;
