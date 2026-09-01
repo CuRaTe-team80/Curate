@@ -2,17 +2,17 @@
 .landing {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-6, 2rem) var(--space-4, 1rem);
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: 2.5rem;
   color: var(--color-text);
 }
 
 .landing-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
+  gap: 2rem;
   align-items: center;
 }
 
@@ -22,51 +22,49 @@
   }
 }
 
-/* Eyebrow badge */
 .landing-eyebrow {
   display: inline-block;
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-primary);
-  background: var(--color-primary-transparent, rgba(56, 189, 248, 0.1));
+  background: rgba(56, 189, 248, 0.1);
   border: 1px solid var(--color-border);
   padding: 4px 12px;
   border-radius: 9999px;
-  margin-bottom: var(--space-3);
+  margin-bottom: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .landing-title {
-  font-size: var(--font-size-2xl);
+  font-size: 2.25rem;
   line-height: 1.15;
   color: var(--color-text);
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
 }
 
 .landing-sub {
-  font-size: var(--font-size-base);
+  font-size: 1rem;
   color: var(--color-text-muted);
   line-height: 1.6;
-  margin-bottom: var(--space-5);
-  max-width: 520px;
+  margin-bottom: 1.25rem;
 }
 
 /* Stats Row */
 .landing-stats {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .stat-number {
-  font-size: var(--font-size-lg);
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--color-primary);
 }
 
 .stat-label {
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
@@ -76,16 +74,16 @@
   background: var(--color-border);
 }
 
-/* Mockup Board */
+/* Mockup Board Visual */
 .mockup-board {
   position: relative;
   z-index: 1;
   width: 100%;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .mockup-titlebar {
@@ -93,49 +91,54 @@
   align-items: center;
   gap: 6px;
   padding: 10px 14px;
-  background: var(--color-bg-subtle, rgba(0, 0, 0, 0.05));
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-border);
+}
+
+.mockup-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.mockup-col-header {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .mockup-card {
-  height: 48px;
+  height: 44px;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
 }
 
 /* Feature Cards Grid */
 .landing-features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-5);
+  gap: 1.25rem;
 }
 
 .feature-card {
-  padding: var(--space-5);
+  padding: 1.5rem;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* ================= LIGHT MODE OVERRIDES ================= */
-[data-theme="light"] .mockup-board,
-[data-theme="light"] .feature-card,
-[data-theme="light"] .step-item {
-  background: #ffffff;
-  border-color: #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+.feature-card h3 {
+  color: var(--color-text);
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
-[data-theme="light"] .mockup-titlebar {
-  background: #f8fafc;
-}
-
-[data-theme="light"] .mockup-card {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
-}
-
-[data-theme="light"] .stat-number {
-  color: #0284c7;
+.feature-card p {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
