@@ -1,29 +1,29 @@
 :root {
-  /* Color palette */
-  --color-primary: #0e7c86;
-  --color-primary-light: #14a3b0;
-  --color-primary-dark: #0a5a61;
-  --color-accent: #f4a259;
+  /* Electric Cyan & Sapphire Navy Palette */
+  --color-primary: #3b82f6;
+  --color-primary-light: #38bdf8;
+  --color-primary-dark: #1d4ed8;
+  --color-accent: #38bdf8;
 
-  --color-bg: #f7fafa;
-  --color-surface: #ffffff;
-  --color-border: #e2e8e8;
+  --color-bg: #030712;
+  --color-surface: rgba(15, 23, 42, 0.75);
+  --color-border: rgba(56, 189, 248, 0.18);
 
-  --color-text: #1a2b2c;
-  --color-text-muted: #5c7273;
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
   --color-text-inverse: #ffffff;
 
-  --color-success: #2e9e5b;
-  --color-warning: #d99a2b;
-  --color-danger: #d64545;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 
-  /* Status colors, matching the board columns */
-  --color-unlabeled: #94a3a3;
-  --color-in-review: #d99a2b;
-  --color-labeled: #2e9e5b;
+  /* Status colors matching board columns */
+  --color-unlabeled: #a855f7;
+  --color-in-review: #38bdf8;
+  --color-labeled: #10b981;
 
   /* Typography */
-  --font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -31,7 +31,7 @@
   --font-size-xl: 1.75rem;
   --font-size-2xl: 2.5rem;
 
-  /* Spacing scale */
+  /* Spacing Scale */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -40,13 +40,13 @@
   --space-6: 32px;
   --space-8: 48px;
 
-  /* Radius & shadow */
+  /* Radius & Shadows */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-  --shadow-sm: 0 1px 3px rgba(10, 30, 30, 0.08);
-  --shadow-md: 0 4px 12px rgba(10, 30, 30, 0.10);
-  --shadow-lg: 0 12px 32px rgba(10, 30, 30, 0.14);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.15);
+  --shadow-lg: 0 0 25px rgba(56, 189, 248, 0.25);
 
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
@@ -54,21 +54,26 @@
 
 * { box-sizing: border-box; }
 
-body {
+html, body, #root, .app {
+  min-height: 100vh;
   margin: 0;
   font-family: var(--font-base);
-  background: var(--color-bg);
-  color: var(--color-text);
+  background-color: var(--color-bg) !important;
+  background-image: 
+    radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.18) 0px, transparent 45%),
+    radial-gradient(at 85% 75%, rgba(6, 182, 212, 0.12) 0px, transparent 45%) !important;
+  background-attachment: fixed !important;
+  color: var(--color-text) !important;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 { margin: 0 0 var(--space-3) 0; font-weight: 700; letter-spacing: -0.02em; }
+h1, h2, h3 { margin: 0 0 var(--space-3) 0; font-weight: 700; letter-spacing: -0.02em; color: var(--color-text-inverse); }
 h1 { font-size: var(--font-size-2xl); }
 h2 { font-size: var(--font-size-xl); }
 h3 { font-size: var(--font-size-lg); }
 p { margin: 0 0 var(--space-3) 0; color: var(--color-text-muted); line-height: 1.6; }
 
-/* Reusable button system */
+/* Reusable Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -85,78 +90,55 @@ p { margin: 0 0 var(--space-3) 0; color: var(--color-text-muted); line-height: 1
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--color-primary);
-  color: var(--color-text-inverse);
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: #ffffff;
   box-shadow: var(--shadow-sm);
 }
-.btn-primary:hover { background: var(--color-primary-light); box-shadow: var(--shadow-md); }
+.btn-primary:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
 
 .btn-secondary {
   background: var(--color-surface);
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-border);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
 }
-.btn-secondary:hover { border-color: var(--color-primary); }
+.btn-secondary:hover {
+  border-color: var(--color-primary-light);
+  background: rgba(30, 41, 59, 0.85);
+}
 
-/* Reusable card */
+/* Reusable Cards */
 .card {
   background: var(--color-surface);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: var(--space-5);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
 }
-.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card:hover { 
+  box-shadow: var(--shadow-md); 
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4);
+}
 
-/* Reusable input */
+/* Reusable Input */
 .input {
   width: 100%;
   padding: var(--space-3) var(--space-4);
   font-family: var(--font-base);
   font-size: var(--font-size-base);
-  border: 1.5px solid var(--color-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: rgba(15, 23, 42, 0.6);
   color: var(--color-text);
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.12);
-}
-
-
-/* Dark mode overrides — toggled via data-theme="dark" on <html> */
-[data-theme="dark"] {
-  --color-primary: #2bb8c4;
-  --color-primary-light: #4fd0db;
-  --color-primary-dark: #1c8f99;
-  --color-accent: #f4a259;
-
-  --color-bg: #10191a;
-  --color-surface: #182525;
-  --color-border: #2a3a3b;
-
-  --color-text: #eef4f4;
-  --color-text-muted: #9fb3b3;
-  --color-text-inverse: #10191a;
-
-  --color-success: #3fbf78;
-  --color-warning: #e0a83f;
-  --color-danger: #e2635a;
-
-  --color-unlabeled: #6b8080;
-  --color-in-review: #e0a83f;
-  --color-labeled: #3fbf78;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
-}
-
-[data-theme="dark"] body {
-  background: var(--color-bg);
-  color: var(--color-text);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }

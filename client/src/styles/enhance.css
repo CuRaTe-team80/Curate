@@ -1,11 +1,4 @@
-﻿/* ============================================
-   Enhance.css — advanced visual polish layer
-   Loaded after theme.css. Does not redefine
-   variables, only builds richer effects on top
-   of the existing classes.
-   ============================================ */
-
-/* Smoother global scrollbar */
+﻿/* Smoother Scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
@@ -14,15 +7,16 @@
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
 
-/* Glassmorphism navbar */
-.navbar {
-  background: color-mix(in srgb, var(--color-surface) 85%, transparent);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  box-shadow: 0 1px 0 var(--color-border), 0 8px 24px rgba(10, 30, 30, 0.04);
+/* Glassmorphism Navbar */
+.navbar, header {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Richer card depth + entrance animation */
+/* Card Entrance Animations */
 @keyframes cardRise {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -30,42 +24,15 @@
 
 .card {
   animation: cardRise 0.35s ease both;
-  box-shadow:
-    0 1px 2px rgba(10, 30, 30, 0.04),
-    0 4px 10px rgba(10, 30, 30, 0.06);
-  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
-}
-.card:hover {
-  box-shadow:
-    0 2px 6px rgba(10, 30, 30, 0.08),
-    0 16px 32px rgba(10, 30, 30, 0.10);
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--color-primary) 30%, var(--color-border));
 }
 
-/* Stagger card entrance inside a column */
 .column .card:nth-child(1) { animation-delay: 0.02s; }
 .column .card:nth-child(2) { animation-delay: 0.06s; }
 .column .card:nth-child(3) { animation-delay: 0.10s; }
 .column .card:nth-child(4) { animation-delay: 0.14s; }
 .column .card:nth-child(5) { animation-delay: 0.18s; }
 
-/* Buttons — more tactile press + subtle sheen on hover */
-.btn {
-  position: relative;
-  overflow: hidden;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
-}
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(14, 124, 134, 0.28);
-}
-.btn:active { transform: translateY(0) scale(0.97); }
-
-/* Column headers — pill-style status badge with live count */
+/* Column Header Status Badges */
 .board .column-header,
 .column-header {
   display: flex;
@@ -73,7 +40,7 @@
   justify-content: space-between;
   padding-bottom: var(--space-3);
   margin-bottom: var(--space-3);
-  border-bottom: 2px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .column-count-badge {
@@ -84,26 +51,21 @@
   height: 22px;
   padding: 0 6px;
   border-radius: 999px;
-  background: var(--color-bg);
+  background: rgba(56, 189, 248, 0.1);
   border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  color: var(--color-primary-light);
   font-size: var(--font-size-xs);
   font-weight: 700;
 }
 
-/* Inputs — soft glow focus instead of flat outline */
-.input:focus {
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 16%, transparent);
-}
-
-/* Section fade-in on route change */
+/* Section Fade-in on View Changes */
 .app > section,
-.app > div.board,
-.app > div.landing {
+.app > div,
+.app > main {
   animation: cardRise 0.28s ease both;
 }
 
-/* Landing mockup — gentle floating motion */
+/* Landing Floating Mockup */
 @keyframes floatMockup {
   0%, 100% { transform: rotate(-1.5deg) translateY(0); }
   50% { transform: rotate(-1.5deg) translateY(-6px); }
@@ -116,24 +78,27 @@
   transform: rotate(0deg) translateY(0);
 }
 
-/* Toast — soft pop-in */
+/* Toast Pop-in */
 @keyframes toastPop {
   from { opacity: 0; transform: translateY(8px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.toast,
-[class*="toast"] {
+.toast, [class*="toast"] {
   animation: toastPop 0.25s ease both;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  backdrop-filter: blur(12px);
 }
 
-/* Dashboard stat cards — subtle accent bar on hover */
+/* Dashboard Accent Bar Glow */
 .dashboard .card::before,
 [class*="dashboard"] .card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: var(--color-primary);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--transition-base);
@@ -143,7 +108,7 @@
   transform: scaleX(1);
 }
 
-/* Respect reduced-motion preference */
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .card, .mockup-board, .toast, [class*="toast"], .app > * {
     animation: none !important;

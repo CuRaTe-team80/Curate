@@ -3,18 +3,18 @@
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 64px);
-  background: var(--color-bg);
   padding: var(--space-5);
 }
 
 .auth-card {
   width: 100%;
   max-width: 420px;
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: var(--space-6);
-  background: var(--color-surface, #1e293b);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 .auth-header {
@@ -25,8 +25,8 @@
 .brand-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--color-primary, #6366f1);
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--color-primary-light);
   border-radius: 9999px;
   font-size: 0.8rem;
   font-weight: 600;
@@ -34,15 +34,15 @@
 }
 
 .auth-title {
-  color: var(--color-text);
+  color: var(--color-text-h);
   margin-bottom: var(--space-1);
   font-size: 1.5rem;
 }
 
 .auth-subtitle {
   color: var(--color-text-muted);
-  margin-bottom: 0;
   font-size: 0.9rem;
+  margin: 0;
 }
 
 .auth-form {
@@ -51,19 +51,6 @@
   gap: var(--space-4);
 }
 
-.auth-error-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--color-danger);
-  color: var(--color-surface, #fff);
-  padding: var(--space-3);
-  border-radius: 8px;
-  margin-bottom: var(--space-4);
-  font-size: 0.9rem;
-}
-
-/* Floating Label & Inputs */
 .input-group {
   position: relative;
   display: flex;
@@ -80,18 +67,18 @@
   width: 100%;
   height: 52px;
   padding: 1.25rem 1rem 0.25rem 1rem;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   color: var(--color-text);
   font-size: 0.95rem;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .input:focus {
-  border-color: var(--color-primary, #6366f1);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
 .input-error {
@@ -106,14 +93,14 @@
   color: var(--color-text-muted);
   font-size: 0.9rem;
   pointer-events: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .input:focus ~ .floating-label,
 .input:not(:placeholder-shown) ~ .floating-label {
   top: 0.8rem;
   font-size: 0.75rem;
-  color: var(--color-primary, #6366f1);
+  color: var(--color-primary-light);
 }
 
 .toggle-password {
@@ -133,7 +120,7 @@
   margin-top: 0.25rem;
 }
 
-/* Strength Meter */
+/* Password Strength Bar */
 .strength-meter {
   display: flex;
   align-items: center;
@@ -155,7 +142,7 @@
   transition: background 0.3s ease;
 }
 
-.strength-bar.active.score-1 { background: var(--color-danger, #ef4444); }
+.strength-bar.active.score-1 { background: var(--color-danger); }
 .strength-bar.active.score-2 { background: #f59e0b; }
 .strength-bar.active.score-3 { background: #3b82f6; }
 .strength-bar.active.score-4 { background: #10b981; }
@@ -169,11 +156,20 @@
 
 .auth-submit {
   width: 100%;
-  height: 46px;
+  height: 48px;
   margin-top: var(--space-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all var(--transition-fast);
+}
+
+.auth-submit:hover:not(:disabled) {
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
 }
 
 .auth-switch {
@@ -184,25 +180,11 @@
 }
 
 .auth-switch a {
-  color: var(--color-primary);
+  color: var(--color-primary-light);
   font-weight: 600;
   text-decoration: none;
 }
 
 .auth-switch a:hover {
-  color: var(--color-primary-light, #818cf8);
-}
-
-/* Spinner */
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  text-decoration: underline;
 }
