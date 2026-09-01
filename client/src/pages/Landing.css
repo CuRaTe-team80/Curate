@@ -1,14 +1,22 @@
-/* ================= LANDING CONTAINER ================= */
-.landing {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--space-6) var(--space-4);
+/* ================= HOW IT WORKS SECTION ================= */
+.how-it-works {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
+  margin-top: var(--space-6);
 }
 
-.landing-hero {
+.section-header {
+  text-align: center;
+}
+
+.section-header h2 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-inverse);
+  margin-top: var(--space-2);
+}
+
+.how-it-works-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
@@ -16,193 +24,100 @@
 }
 
 @media (max-width: 968px) {
-  .landing-hero {
+  .how-it-works-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* ================= LEFT HERO TEXT ================= */
-.landing-eyebrow {
-  display: inline-block;
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  color: var(--color-primary-light);
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid var(--color-border);
-  padding: 4px 12px;
-  border-radius: 9999px;
-  margin-bottom: var(--space-3);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.landing-title {
-  font-size: var(--font-size-2xl);
-  line-height: 1.15;
-  color: var(--color-text-inverse);
-  margin-bottom: var(--space-4);
-}
-
-.landing-sub {
-  font-size: var(--font-size-base);
-  color: var(--color-text-muted);
-  line-height: 1.6;
-  margin-bottom: var(--space-5);
-  max-width: 520px;
-}
-
-.landing-actions {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  margin-bottom: var(--space-6);
-}
-
-.btn-arrow {
-  margin-left: var(--space-1);
-}
-
-/* Stats Row Fix */
-.landing-stats {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.stat {
+.steps-list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
 }
 
-.stat-number {
-  font-size: var(--font-size-lg);
+.step-item {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: rgba(15, 23, 42, 0.4);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.step-item:hover {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.step-item--active {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-badge {
+  font-size: var(--font-size-xs);
   font-weight: 700;
   color: var(--color-primary-light);
-}
-
-.stat-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.stat-divider {
-  width: 1px;
-  height: 28px;
-  background: var(--color-border);
-}
-
-/* ================= RIGHT HERO MOCKUP BOARD ================= */
-.landing-hero-visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.mockup-glow {
-  position: absolute;
-  inset: -20px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.mockup-board {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(16px);
-}
-
-.mockup-titlebar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  background: rgba(30, 41, 59, 0.5);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.mockup-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #f59e0b; }
-.dot-green { background: #10b981; }
-.dot-gray { background: #64748b; }
-.dot-amber { background: #f59e0b; }
-
-.mockup-columns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
-  padding: var(--space-4);
-}
-
-.mockup-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.mockup-col-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  font-weight: 600;
+  text-transform: uppercase;
   margin-bottom: var(--space-1);
+  display: block;
 }
 
-.mockup-col-dot {
-  width: 6px;
-  height: 6px;
+.step-item h4 {
+  margin: 0 0 var(--space-1) 0;
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-base);
+}
+
+.step-item p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Step Preview Card */
+.step-preview-card {
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--color-border);
+}
+
+.preview-status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid;
+  border-radius: 9999px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-inverse);
+  width: fit-content;
+}
+
+.preview-status-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
 }
 
-.mockup-card {
-  height: 48px;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.mockup-card-flag {
-  border-color: rgba(245, 158, 11, 0.5);
-  background: rgba(245, 158, 11, 0.08);
-}
-
-/* ================= FEATURES GRID ================= */
-.landing-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-5);
-}
-
-.feature-card {
+.preview-content-placeholder {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--space-2);
+  margin-top: var(--space-4);
 }
 
-.feature-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-2);
+.preview-line {
+  height: 12px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.15);
 }
 
-.icon-teal { background: rgba(20, 184, 166, 0.15); color: #14b8a6; }
-.icon-amber { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-.icon-primary { background: rgba(56, 189, 248, 0.15); color: var(--color-primary-light); }
+.preview-line.long { width: 85%; }
+.preview-line.medium { width: 65%; }
+.preview-line.short { width: 40%; }
