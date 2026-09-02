@@ -1,5 +1,4 @@
-@'
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 
 const boardSchema = new mongoose.Schema(
   {
@@ -19,4 +18,3 @@ const boardSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Board', boardSchema);
-'@ | Set-Content -Path models\Board.js -Encoding utf8
