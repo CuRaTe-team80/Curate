@@ -1,5 +1,4 @@
-@'
-const Board = require('../models/Board');
+﻿const Board = require('../models/Board');
 
 const getAllBoards = async (req, res) => {
   try {
@@ -24,4 +23,3 @@ const createBoard = async (req, res) => {
 };
 
 module.exports = { getAllBoards, createBoard };
-'@ | Set-Content -Path controllers\boardsController.js -Encoding utf8
