@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+﻿import { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchFilterBar from './SearchFilterBar';
 import Column from './Column';
 import SampleDetail from './SampleDetail';
@@ -10,10 +10,10 @@ import { useLocalCache } from '../hooks/useLocalCache';
 import { useSocket } from '../hooks/useSocket';
 import { useToast } from '../context/ToastContext';
 
-const API_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/samples`;
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const COLUMNS = ['Unlabeled', 'In Review', 'Labeled'];
 
-function Board() {
+function Board({ boardId }) {
   const [samples, setSamples] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,15 +21,13 @@ function Board() {
 
   const { showToast } = useToast();
 
-  // Filter state
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  // Client-side persistence
-  const { loadCache, clearCache } = useLocalCache('board_state', samples);
+  const cacheKey = boardId ? 'board_state_' + boardId : 'board_state';
+  const { loadCache, clearCache } = useLocalCache(cacheKey, samples);
 
-  // Handle sample updates from local actions and Socket.io
   const handleSampleUpdate = useCallback((updatedSample) => {
     setSamples((previousSamples) =>
       previousSamples.map((sample) =>
@@ -43,16 +41,18 @@ function Board() {
     );
   }, []);
 
-  // Fetch samples and restore cached board state
   useEffect(() => {
-    // Try restoring from cache first, so the board isn't blank on refresh
     const cached = loadCache();
     if (cached && cached.length > 0) {
       setSamples(cached);
       setLoading(false);
     }
 
-    fetch(API_URL)
+    const url = boardId
+      ? BASE_URL + '/samples?boardId=' + boardId
+      : BASE_URL + '/samples';
+
+    fetch(url)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to fetch samples');
@@ -63,21 +63,18 @@ function Board() {
         setSamples(data);
         setLoading(false);
         setError(null);
-        clearCache(); // fresh server data confirmed, drop the fallback
+        clearCache();
       })
       .catch((fetchError) => {
-        // Keep cached board visible if the API is temporarily unavailable
         if (!cached || cached.length === 0) {
           setError(fetchError.message);
         }
         setLoading(false);
       });
-  }, [loadCache, clearCache]);
+  }, [loadCache, clearCache, boardId]);
 
-  // Listen for real-time updates from Socket.io
   useSocket(handleSampleUpdate, showToast);
 
-  // Apply search and filters
   const filteredSamples = useMemo(() => {
     return samples.filter((sample) => {
       const matchesSearch = (sample.content || '')
