@@ -1,18 +1,14 @@
-const express = require('express');
+﻿const express = require('express');
 const cors = require('cors');
 const app = express();
-
 const corsOrigin = process.env.CORS_ORIGIN || '*';
-
 app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
-
 const samplesRouter = require('./routes/samples');
 app.use('/samples', samplesRouter);
-
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
-
+const boardsRouter = require('./routes/boards');
+app.use('/boards', boardsRouter);
 app.get('/', (req, res) => res.send('Curate API running'));
-
 module.exports = app;
