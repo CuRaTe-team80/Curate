@@ -1,62 +1,52 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import UserMenu from "./UserMenu";
 import "./Navbar.css";
 
-function Navbar({ currentView, onNavigate }) {
-  const [dark, setDark] = useState(() => {
+function Navbar(props) {
+  const currentView = props.currentView;
+  const onNavigate = props.onNavigate;
+  const [dark, setDark] = useState(function () {
     return localStorage.getItem("curate_theme") === "dark";
   });
 
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      dark ? "dark" : "light"
-    );
+  useEffect(function () {
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     localStorage.setItem("curate_theme", dark ? "dark" : "light");
   }, [dark]);
 
+  function linkClass(name) {
+    var base = "navbar-link";
+    if (currentView === name) {
+      base = base + " navbar-link--active";
+    }
+    return base;
+  }
+
   return (
     <nav className="navbar">
-      {/* Brand */}
       <div className="navbar-brand">
-        <span className="navbar-logo" aria-hidden="true">
-          ◆
-        </span>
+        <span className="navbar-logo" aria-hidden="true">◆</span>
         <span className="navbar-name">Curate</span>
       </div>
-
-      {/* Navigation */}
       <div className="navbar-links">
-        <button
-          type="button"
-          className={`navbar-link${
-            currentView === "board" ? " navbar-link--active" : ""
-          }`}
-          onClick={() => onNavigate("board")}
-        >
+        <button type="button" className={linkClass("boards")} onClick={function () { onNavigate("boards"); }}>
+          Boards
+        </button>
+        <button type="button" className={linkClass("board")} onClick={function () { onNavigate("board"); }}>
           Board
         </button>
-        <button
-          type="button"
-          className={`navbar-link${
-            currentView === "dashboard" ? " navbar-link--active" : ""
-          }`}
-          onClick={() => onNavigate("dashboard")}
-        >
+        <button type="button" className={linkClass("dashboard")} onClick={function () { onNavigate("dashboard"); }}>
           Dashboard
         </button>
-
-        {/* Theme toggle */}
         <button
           type="button"
           className="btn btn-secondary theme-toggle"
-          onClick={() => setDark((d) => !d)}
+          onClick={function () { setDark(function (d) { return !d; }); }}
           aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
           title={dark ? "Switch to light mode" : "Switch to dark mode"}
         >
           {dark ? "☀" : "☾"}
         </button>
-
         <UserMenu onNavigate={onNavigate} />
       </div>
     </nav>
