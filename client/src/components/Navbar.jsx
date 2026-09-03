@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import UserMenu from "./UserMenu";
 import "./Navbar.css";
 
@@ -17,36 +17,37 @@ function Navbar({ currentView, onNavigate }) {
 
   return (
     <nav className="navbar">
-      {/* Brand */}
       <div className="navbar-brand">
         <span className="navbar-logo" aria-hidden="true">
           ◆
         </span>
         <span className="navbar-name">Curate</span>
       </div>
-
-      {/* Navigation */}
       <div className="navbar-links">
         <button
           type="button"
-          className={`navbar-link${
-            currentView === "board" ? " navbar-link--active" : ""
-          }`}
+          className={
+avbar-link+(currentView === "boards" ? " navbar-link--active" : "")}
+          onClick={() => onNavigate("boards")}
+        >
+          Boards
+        </button>
+        <button
+          type="button"
+          className={
+avbar-link+(currentView === "board" ? " navbar-link--active" : "")}
           onClick={() => onNavigate("board")}
         >
           Board
         </button>
         <button
           type="button"
-          className={`navbar-link${
-            currentView === "dashboard" ? " navbar-link--active" : ""
-          }`}
+          className={
+avbar-link+(currentView === "dashboard" ? " navbar-link--active" : "")}
           onClick={() => onNavigate("dashboard")}
         >
           Dashboard
         </button>
-
-        {/* Theme toggle */}
         <button
           type="button"
           className="btn btn-secondary theme-toggle"
@@ -56,7 +57,6 @@ function Navbar({ currentView, onNavigate }) {
         >
           {dark ? "☀" : "☾"}
         </button>
-
         <UserMenu onNavigate={onNavigate} />
       </div>
     </nav>
