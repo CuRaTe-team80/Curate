@@ -1,5 +1,4 @@
-$content = @"
-import './App.css'
+﻿import './App.css'
 import './styles/theme.css'
 import './styles/enhance.css'
 import Navbar from './components/Navbar'
