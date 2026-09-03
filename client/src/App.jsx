@@ -45,5 +45,3 @@ function App() {
 }
 
 export default App
-"@
-Set-Content -Path App.jsx -Value $content -Encoding utf8
