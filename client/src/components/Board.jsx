@@ -5,6 +5,7 @@ import SampleDetail from './SampleDetail';
 import LoadingState from './LoadingState';
 import EmptyState from './EmptyState';
 import ErrorState from './ErrorState';
+import BulkActionBar from './BulkActionBar';
 import './Board.css';
 import { useLocalCache } from '../hooks/useLocalCache';
 import { useSocket } from '../hooks/useSocket';
@@ -18,6 +19,7 @@ function Board({ boardId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSample, setSelectedSample] = useState(null);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
   const { showToast } = useToast();
 
@@ -40,6 +42,50 @@ function Board({ boardId }) {
         : previousSelectedSample
     );
   }, []);
+
+  const toggleSelect = useCallback((id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedIds(new Set());
+  }, []);
+
+  async function handleBulkApply(label) {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+
+    try {
+      const updated = await Promise.all(
+        ids.map((id) =>
+          fetch(`${BASE_URL}/samples/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ currentLabel: label }),
+          }).then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to update sample ${id}`);
+            }
+            return response.json();
+          })
+        )
+      );
+
+      updated.forEach((sample) => handleSampleUpdate(sample));
+      showToast(`Applied "${label}" to ${ids.length} sample${ids.length > 1 ? 's' : ''}`);
+      clearSelection();
+    } catch (bulkError) {
+      showToast('Failed to apply label to one or more samples', 'error');
+    }
+  }
 
   useEffect(() => {
     const cached = loadCache();
@@ -118,11 +164,19 @@ function Board({ boardId }) {
             )}
             onSelectSample={setSelectedSample}
             onSampleUpdate={handleSampleUpdate}
+            selectedIds={selectedIds}
+            onToggleSelect={toggleSelect}
           />
         ))}
       </div>
 
       <SampleDetail sample={selectedSample} onClose={() => setSelectedSample(null)} />
+
+      <BulkActionBar
+        selectedCount={selectedIds.size}
+        onApplyLabel={handleBulkApply}
+        onClear={clearSelection}
+      />
     </div>
   );
 }
