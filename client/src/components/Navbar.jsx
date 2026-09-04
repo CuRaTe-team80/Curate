@@ -36,6 +36,7 @@ function Navbar({ currentView, onNavigate }) {
         >
           Board
         </button>
+
         <button
           type="button"
           className={`navbar-link${
@@ -44,6 +45,16 @@ function Navbar({ currentView, onNavigate }) {
           onClick={() => onNavigate("dashboard")}
         >
           Dashboard
+        </button>
+
+        <button
+          type="button"
+          className={`navbar-link${
+            currentView === "notifications" ? " navbar-link--active" : ""
+          }`}
+          onClick={() => onNavigate("notifications")}
+        >
+          Notifications
         </button>
 
         {/* Theme toggle */}

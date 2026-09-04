@@ -37,11 +37,15 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
       );
 
       if (response.status === 409) {
-        const data = await response.json();
-        setConflictSample(data.currentSample);
-        setIsSaving(false);
-        return;
-      }
+  const data = await response.json();
+
+  setConflictSample(data.currentSample);
+
+  showToast("Conflict detected: sample was updated by another user.", "warning");
+
+  setIsSaving(false);
+  return;
+}
 
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
