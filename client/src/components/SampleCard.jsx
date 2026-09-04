@@ -1,9 +1,9 @@
 import LabelPicker from "./LabelPicker";
 
-function SampleCard({ sample, onClick, onSampleUpdate })  {
+function SampleCard({ sample, onClick, onSampleUpdate, isSelected, onToggleSelect }) {
   return (
     <div
-      className="card"
+      className={`card${isSelected ? ' card-selected' : ''}`}
       onClick={onClick}
       style={{
         width: "320px",
@@ -12,8 +12,17 @@ function SampleCard({ sample, onClick, onSampleUpdate })  {
         flexDirection: "column",
         gap: "var(--space-4)",
         cursor: "pointer",
+        position: "relative",
       }}
     >
+      <label className="sample-select" onClick={(e) => e.stopPropagation()}>
+        <input
+          type="checkbox"
+          checked={!!isSelected}
+          onChange={onToggleSelect}
+        />
+      </label>
+
       <div
         style={{
           padding: "var(--space-4)",
@@ -52,8 +61,8 @@ function SampleCard({ sample, onClick, onSampleUpdate })  {
       </div>
 
       <div onClick={(e) => e.stopPropagation()}>
-  <LabelPicker sampleId={sample.id} onSampleUpdate={onSampleUpdate} />
-</div>
+        <LabelPicker sampleId={sample.id} onSampleUpdate={onSampleUpdate} />
+      </div>
     </div>
   );
 }
