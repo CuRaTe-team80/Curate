@@ -5,6 +5,7 @@ import SampleDetail from './SampleDetail';
 import LoadingState from './LoadingState';
 import EmptyState from './EmptyState';
 import ErrorState from './ErrorState';
+import ExportButton from './ExportButton';
 import './Board.css';
 import { useLocalCache } from '../hooks/useLocalCache';
 import { useSocket } from '../hooks/useSocket';
@@ -98,14 +99,17 @@ function Board({ boardId }) {
 
   return (
     <div className="board">
-      <SearchFilterBar
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        typeFilter={typeFilter}
-        onTypeFilterChange={setTypeFilter}
-        statusFilter={statusFilter}
-        onStatusFilterChange={setStatusFilter}
-      />
+      <div className="board-toolbar">
+        <SearchFilterBar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          typeFilter={typeFilter}
+          onTypeFilterChange={setTypeFilter}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+        />
+        <ExportButton />
+      </div>
 
       <div style={{ display: 'flex', gap: 'var(--space-5)' }}>
         {COLUMNS.map((columnStatus) => (

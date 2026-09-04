@@ -94,9 +94,50 @@ const updateSample = async (req, res) => {
   }
 };
 
+// GET /samples/export - download all samples as CSV
+const exportSamples = async (req, res) => {
+  try {
+    const samples = await Sample.find({});
+
+    const escapeCsvField = (value) => {
+      if (value === null || value === undefined) return '';
+      const str = String(value);
+      if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const headers = ['id', 'content', 'type', 'currentLabel', 'status', 'labeledBy', 'createdAt', 'updatedAt'];
+    const rows = samples.map((s) =>
+      [
+        s._id.toString(),
+        s.content,
+        s.type,
+        s.currentLabel,
+        s.status,
+        s.labeledBy,
+        s.createdAt ? s.createdAt.toISOString() : '',
+        s.updatedAt ? s.updatedAt.toISOString() : '',
+      ]
+        .map(escapeCsvField)
+        .join(',')
+    );
+
+    const csv = [headers.join(','), ...rows].join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="curate-samples-export.csv"');
+    res.status(200).send(csv);
+  } catch (err) {
+    res.status(500).json({ message: 'Error exporting samples', error: err.message });
+  }
+};
+
 module.exports = {
   getAllSamples,
   getSampleById,
   createSample,
   updateSample,
+  exportSamples,
 };
