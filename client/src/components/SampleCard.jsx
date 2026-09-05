@@ -16,12 +16,13 @@ function SampleCard({ sample, onClick, onSampleUpdate, isSelected, onToggleSelec
       }}
     >
       <label className="sample-select" onClick={(e) => e.stopPropagation()}>
-        <input
-          type="checkbox"
-          checked={!!isSelected}
-          onChange={onToggleSelect}
-        />
-      </label>
+  <input
+    type="checkbox"
+    checked={!!isSelected}
+    onChange={onToggleSelect}
+    onClick={(e) => e.stopPropagation()}
+  />
+</label>
 
       <div
         style={{
