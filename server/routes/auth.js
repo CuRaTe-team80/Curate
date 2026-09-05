@@ -54,8 +54,50 @@ router.post('/login', async (req, res) => {
 });
 
 // GET /auth/me
-router.get('/me', authMiddleware, (req, res) => {
-  return res.status(200).json({ message: 'Protected route accessed successfully!', user: req.user });
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-passwordHash');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    return res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error fetching user.' });
+  }
 });
+// PATCH /auth/password
+router.patch('/password', authMiddleware, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Current and new password are required.' });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters.' });
+    }
 
+    const user = await User.findById(req.user.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect.' });
+    }
+
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return res.status(200).json({ message: 'Password updated successfully.' });
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error while updating password.' });
+  }
+});
 module.exports = router;
