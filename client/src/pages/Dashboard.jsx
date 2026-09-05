@@ -1,94 +1,127 @@
-import { useState, useEffect } from 'react';
-import './Dashboard.css';
+import React, { useState, useEffect } from 'react';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Legend
+} from 'recharts';
 
-const API_URL = 'http://localhost:5000/samples';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-function Dashboard() {
+const COLORS = ['#94a3b8', '#f59e0b', '#10b981'];
+
+export default function Dashboard() {
   const [samples, setSamples] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch samples');
-        return res.json();
-      })
+    fetch(`${API_BASE}/api/samples`)
+      .then((res) => res.json())
       .then((data) => {
-        setSamples(data);
+        setSamples(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        console.error('Failed to load dashboard data:', err);
         setLoading(false);
       });
   }, []);
-
-  if (loading) return <p>Loading dashboard...</p>;
-  if (error) return <p>Error loading dashboard: {error}</p>;
 
   const total = samples.length;
   const unlabeled = samples.filter((s) => s.status === 'Unlabeled').length;
   const inReview = samples.filter((s) => s.status === 'In Review').length;
   const labeled = samples.filter((s) => s.status === 'Labeled').length;
 
-  const pct = (count) => (total === 0 ? 0 : Math.round((count / total) * 100));
+  const chartData = [
+    { name: 'Unlabeled', value: unlabeled || (total === 0 ? 1 : 0) },
+    { name: 'In Review', value: inReview },
+    { name: 'Labeled', value: labeled }
+  ];
+
+  const barData = [
+    { status: 'Unlabeled', count: unlabeled },
+    { status: 'In Review', count: inReview },
+    { status: 'Labeled', count: labeled }
+  ];
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Dashboard</h1>
-        <p>A quick snapshot of how the labeling effort is going.</p>
+    <div style={{ maxWidth: '1000px', margin: '40px auto', padding: '0 20px', fontFamily: 'inherit' }}>
+      <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '8px', color: '#1e293b' }}>
+        Dataset Analytics
+      </h1>
+      <p style={{ color: '#64748b', marginBottom: '32px' }}>
+        Live metrics and status distribution for current samples.
+      </p>
+
+      {/* Summary KPI Cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <span style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 600 }}>Total Samples</span>
+          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#0f172a', marginTop: '4px' }}>{total}</div>
+        </div>
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <span style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 600 }}>Unlabeled</span>
+          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#94a3b8', marginTop: '4px' }}>{unlabeled}</div>
+        </div>
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <span style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 600 }}>In Review</span>
+          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#f59e0b', marginTop: '4px' }}>{inReview}</div>
+        </div>
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <span style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 600 }}>Labeled</span>
+          <div style={{ fontSize: '1.875rem', fontWeight: 700, color: '#10b981', marginTop: '4px' }}>{labeled}</div>
+        </div>
       </div>
 
-      <div className="dashboard-summary card">
-        <div className="dashboard-total">
-          <span className="dashboard-total__number">{total}</span>
-          <span className="dashboard-total__label">Total samples</span>
+      {/* Visual Charts Container */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+        {/* Donut Chart */}
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#1e293b', marginBottom: '16px' }}>Status Breakdown (Donut)</h3>
+          <div style={{ width: '100%', height: 260 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={90}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
-        <p className="dashboard-summary__text">
-          {labeled} of {total} samples are fully labeled ({pct(labeled)}%).
-          {inReview > 0 && ` ${inReview} still ${inReview === 1 ? 'needs' : 'need'} review.`}
-          {unlabeled > 0 && ` ${unlabeled} ${unlabeled === 1 ? 'is' : 'are'} untouched.`}
-        </p>
-      </div>
-
-      <div className="dashboard-progress card">
-        <h3>Progress by status</h3>
-
-        <div className="dashboard-bar">
-          <div
-            className="dashboard-bar__segment dashboard-bar__segment--unlabeled"
-            style={{ width: `${pct(unlabeled)}%` }}
-          />
-          <div
-            className="dashboard-bar__segment dashboard-bar__segment--in-review"
-            style={{ width: `${pct(inReview)}%` }}
-          />
-          <div
-            className="dashboard-bar__segment dashboard-bar__segment--labeled"
-            style={{ width: `${pct(labeled)}%` }}
-          />
-        </div>
-
-        <div className="dashboard-legend">
-          <div className="dashboard-legend__item">
-            <span className="dot dot--unlabeled" />
-            Unlabeled <strong>{unlabeled}</strong>
-          </div>
-          <div className="dashboard-legend__item">
-            <span className="dot dot--in-review" />
-            In Review <strong>{inReview}</strong>
-          </div>
-          <div className="dashboard-legend__item">
-            <span className="dot dot--labeled" />
-            Labeled <strong>{labeled}</strong>
+        {/* Bar Chart */}
+        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: '#1e293b', marginBottom: '16px' }}>Distribution Count (Bar)</h3>
+          <div style={{ width: '100%', height: 260 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={barData} margin={{ top: 10, right: 20, left: -20, bottom: 0 }}>
+                <XAxis dataKey="status" stroke="#94a3b8" />
+                <YAxis allowDecimals={false} stroke="#94a3b8" />
+                <Tooltip />
+                <Bar dataKey="count" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-export default Dashboard;
