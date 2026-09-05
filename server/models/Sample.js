@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const historyEntrySchema = new mongoose.Schema(
+const historyEntrySchema = new Schema(
   {
     action: { type: String, required: true },
     label: { type: String, required: true },
@@ -10,6 +11,12 @@ const historyEntrySchema = new mongoose.Schema(
   { _id: false }
 );
 
+const commentSchema = new Schema({
+  text: { type: String, required: true, trim: true },
+  user: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
 const sampleSchema = new mongoose.Schema(
   {
     content: { type: String, required: true },
@@ -18,6 +25,10 @@ const sampleSchema = new mongoose.Schema(
     status: { type: String, default: 'Unlabeled' },
     labeledBy: { type: String, default: null },
     history: { type: [historyEntrySchema], default: [] },
+    comments: {
+      type: [commentSchema],
+      default: [],
+    },
   },
   {
     timestamps: true, // adds createdAt and updatedAt — Isuli's conflict detection needs updatedAt
