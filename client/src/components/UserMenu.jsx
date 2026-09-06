@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
+import ConfirmDialog from './ConfirmDialog';
 import './UserMenu.css';
 
 function decodeJwtPayload(token) {
@@ -21,6 +22,7 @@ function decodeJwtPayload(token) {
 export default function UserMenu({ onNavigate }) {
   const { token, isAuthenticated, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const menuRef = useRef(null);
 
   const user = useMemo(() => {
@@ -52,9 +54,18 @@ export default function UserMenu({ onNavigate }) {
     );
   }
 
-  function handleLogout() {
+  function handleLogoutClick() {
     setOpen(false);
+    setConfirmOpen(true);
+  }
+
+  function handleConfirmLogout() {
+    setConfirmOpen(false);
     logout();
+  }
+
+  function handleCancelLogout() {
+    setConfirmOpen(false);
   }
 
   return (
@@ -86,11 +97,21 @@ export default function UserMenu({ onNavigate }) {
           >
             Profile
           </button>
-          <button className="user-menu-item" role="menuitem" onClick={handleLogout}>
+          <button className="user-menu-item" role="menuitem" onClick={handleLogoutClick}>
             Logout
           </button>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Log out?"
+        message="You'll need to log in again to access your boards."
+        confirmLabel="Log out"
+        cancelLabel="Cancel"
+        onConfirm={handleConfirmLogout}
+        onCancel={handleCancelLogout}
+      />
     </div>
   );
 }
