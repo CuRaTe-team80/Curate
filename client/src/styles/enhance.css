@@ -115,3 +115,5 @@
     transition: none !important;
   }
 }
+.sample-focused { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius-md); }
+.board-shortcut-hint { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-3); }
