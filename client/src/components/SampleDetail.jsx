@@ -1,4 +1,5 @@
 import "./SampleDetail.css";
+import CommentSection from './CommentSection';
 
 function SampleDetail({ sample, onClose }) {
   if (!sample) return null;
@@ -45,8 +46,10 @@ function SampleDetail({ sample, onClose }) {
           )}
         </div>
       </div>
-    </div>
-  );
+      <CommentSection sampleId={sample.id || sample._id} />
+</div>
+        );
 }
+
 
 export default SampleDetail;
