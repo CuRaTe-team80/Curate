@@ -3,7 +3,7 @@ import SampleCard from "./SampleCard";
 
 const API_URL = 'http://localhost:5000/samples';
 
-function Column({ title, samples, onSelectSample, onSampleUpdate }) {
+function Column({ title, samples, onSelectSample, onSampleUpdate, selectedIds, onToggleSelect }) {
   const slug = title.toLowerCase().replace(/\s+/g, '-');
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -13,7 +13,7 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
   }
 
   function handleDragOver(e) {
-    e.preventDefault(); // required to allow dropping here
+    e.preventDefault();
     setIsDragOver(true);
   }
 
@@ -28,7 +28,6 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
     const sampleId = e.dataTransfer.getData('text/plain');
     if (!sampleId) return;
 
-    // already in this column — nothing to do
     if (samples.some((s) => s.id === sampleId)) return;
 
     try {
@@ -76,6 +75,8 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
                 sample={sample}
                 onClick={() => onSelectSample(sample)}
                 onSampleUpdate={onSampleUpdate}
+                isSelected={selectedIds ? selectedIds.has(sample.id) : false}
+                onToggleSelect={() => onToggleSelect && onToggleSelect(sample.id)}
               />
             </div>
           ))
