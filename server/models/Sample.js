@@ -25,6 +25,10 @@ const sampleSchema = new mongoose.Schema(
     status: { type: String, default: 'Unlabeled' },
     labeledBy: { type: String, default: null },
     history: { type: [historyEntrySchema], default: [] },
+    isFlagged: {
+      type: Boolean,
+      default: false
+    },
     comments: {
       type: [commentSchema],
       default: [],

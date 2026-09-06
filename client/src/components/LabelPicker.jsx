@@ -14,6 +14,7 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
   const { showToast } = useToast();
 
   const [selectedLabel, setSelectedLabel] = useState(null);
+  const [isFlagged, setIsFlagged] = useState(false);
   const [conflictSample, setConflictSample] = useState(null);
   const [lastKnownUpdatedAt, setLastKnownUpdatedAt] = useState(sampleUpdatedAt);
   const [isSaving, setIsSaving] = useState(false);
@@ -25,12 +26,13 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/samples/${sampleId}`,
+        ${import.meta.env.VITE_API_URL}/samples/${sampleId},
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             currentLabel: label,
+            isFlagged: false,
             clientUpdatedAt: lastKnownUpdatedAt,
           }),
         }
@@ -44,12 +46,13 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
       }
 
       if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
+        throw new Error(Request failed with status ${response.status});
       }
 
       const data = await response.json();
 
       setSelectedLabel(data.currentLabel ?? label);
+      setIsFlagged(false);
       setLastKnownUpdatedAt(data.updatedAt);
       setConflictSample(null);
 
@@ -66,9 +69,58 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
     }
   }
 
+  async function handleFlagClick() {
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        ${import.meta.env.VITE_API_URL}/samples/${sampleId},
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            isFlagged: true,
+            clientUpdatedAt: lastKnownUpdatedAt,
+          }),
+        }
+      );
+
+      if (response.status === 409) {
+        const data = await response.json();
+        setConflictSample(data.currentSample);
+        setIsSaving(false);
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(Request failed with status ${response.status});
+      }
+
+      const data = await response.json();
+
+      setIsFlagged(true);
+      setSelectedLabel(null);
+      setLastKnownUpdatedAt(data.updatedAt);
+      setConflictSample(null);
+
+      showToast("Sample flagged as unclear", "success");
+
+      if (onSampleUpdate) {
+        onSampleUpdate(data);
+      }
+    } catch (err) {
+      setError("Could not flag sample. Please try again.");
+      showToast("Error flagging sample", "error");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
   function handleRefresh() {
     if (!conflictSample) return;
     setSelectedLabel(conflictSample.currentLabel ?? null);
+    setIsFlagged(conflictSample.isFlagged ?? false);
     setLastKnownUpdatedAt(conflictSample.updatedAt);
     setConflictSample(null);
     if (onSampleUpdate) {
@@ -100,10 +152,11 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
           display: "flex",
           flexWrap: "wrap",
           gap: "var(--space-2)",
+          alignItems: "center",
         }}
       >
         {LABELS.map(({ name, icon, color }) => {
-          const isActive = selectedLabel === name;
+          const isActive = selectedLabel === name && !isFlagged;
 
           return (
             <button
@@ -136,6 +189,35 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
             </button>
           );
         })}
+
+        {/* Flag as unclear button */}
+        <button
+          type="button"
+          disabled={isSaving}
+          className="btn"
+          onClick={handleFlagClick}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "var(--space-1)",
+            backgroundColor: isFlagged
+              ? "var(--color-warning, #f59e0b)"
+              : "var(--color-surface)",
+            border: `1px solid ${
+              isFlagged ? "var(--color-warning, #f59e0b)" : "var(--color-text-muted, #9ca3af)"
+            }`,
+            color: isFlagged
+              ? "#fff"
+              : "var(--color-text, #374151)",
+            opacity: isSaving ? 0.6 : 1,
+            cursor: isSaving ? "not-allowed" : "pointer",
+          }}
+        >
+          <span aria-hidden="true" style={{ fontSize: "0.9em" }}>
+            🚩
+          </span>
+          Flag as unclear
+        </button>
       </div>
     </div>
   );
