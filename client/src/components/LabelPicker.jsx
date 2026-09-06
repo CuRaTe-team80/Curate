@@ -1,7 +1,10 @@
+
 // client/src/components/LabelPicker.jsx
 import { useState } from "react";
 import ConflictBanner from "./ConflictBanner";
 import { useToast } from "../context/ToastContext";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const LABELS = [
   { name: "Positive", icon: "\u2713", color: "var(--color-success)" },
@@ -25,6 +28,7 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
     setError(null);
 
     try {
+sprint8/m3-flag-unclear
       const response = await fetch(
         ${import.meta.env.VITE_API_URL}/samples/${sampleId},
         {
@@ -37,13 +41,29 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
           }),
         }
       );
+=======
+     const response = await fetch(
+  `${API_URL}/samples/${sampleId}`,
+  {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      currentLabel: label,
+      clientUpdatedAt: lastKnownUpdatedAt,
+    }),
+  }
+); main
 
       if (response.status === 409) {
-        const data = await response.json();
-        setConflictSample(data.currentSample);
-        setIsSaving(false);
-        return;
-      }
+  const data = await response.json();
+
+  setConflictSample(data.currentSample);
+
+  showToast("Conflict detected: sample was updated by another user.", "warning");
+
+  setIsSaving(false);
+  return;
+}
 
       if (!response.ok) {
         throw new Error(Request failed with status ${response.status});

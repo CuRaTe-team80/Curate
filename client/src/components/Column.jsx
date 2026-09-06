@@ -1,9 +1,17 @@
-import { useState } from 'react';
-import SampleCard from "./SampleCard";
+﻿import { useState } from 'react';
+import SampleCard from './SampleCard';
 
-const API_URL = 'http://localhost:5000/samples';
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/samples';
 
-function Column({ title, samples, onSelectSample, onSampleUpdate }) {
+function Column(props) {
+  const title = props.title;
+  const samples = props.samples;
+  const onSelectSample = props.onSelectSample;
+  const onSampleUpdate = props.onSampleUpdate;
+  const selectedIds = props.selectedIds;
+  const onToggleSelect = props.onToggleSelect;
+  const focusedId = props.focusedId;
+
   const slug = title.toLowerCase().replace(/\s+/g, '-');
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -13,7 +21,7 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
   }
 
   function handleDragOver(e) {
-    e.preventDefault(); // required to allow dropping here
+    e.preventDefault();
     setIsDragOver(true);
   }
 
@@ -28,17 +36,16 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
     const sampleId = e.dataTransfer.getData('text/plain');
     if (!sampleId) return;
 
-    // already in this column — nothing to do
-    if (samples.some((s) => s.id === sampleId)) return;
+    if (samples.some(function (s) { return s.id === sampleId; })) return;
 
     try {
-      const response = await fetch(`${API_URL}/${sampleId}`, {
+      const response = await fetch(API_URL + '/' + sampleId, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: title }),
       });
 
-      if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+      if (!response.ok) throw new Error('Request failed with status ' + response.status);
 
       const data = await response.json();
       if (onSampleUpdate) onSampleUpdate(data);
@@ -49,7 +56,7 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
 
   return (
     <div
-      className={`column column-${slug}${isDragOver ? ' column-drag-over' : ''}`}
+      className={'column column-' + slug + (isDragOver ? ' column-drag-over' : '')}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -61,24 +68,29 @@ function Column({ title, samples, onSelectSample, onSampleUpdate }) {
       <div className="column-samples">
         {samples.length === 0 ? (
           <div className="column-empty">
-            <div className="column-empty-icon">🗂️</div>
+            <div className="column-empty-icon">Empty</div>
             <p>No samples yet</p>
           </div>
         ) : (
-          samples.map((sample) => (
-            <div
-              key={sample.id}
-              draggable="true"
-              onDragStart={(e) => handleDragStart(e, sample.id)}
-              className="sample-drag-wrapper"
-            >
-              <SampleCard
-                sample={sample}
-                onClick={() => onSelectSample(sample)}
-                onSampleUpdate={onSampleUpdate}
-              />
-            </div>
-          ))
+          samples.map(function (sample) {
+            const isFocused = focusedId === sample.id;
+            return (
+              <div
+                key={sample.id}
+                draggable="true"
+                onDragStart={function (e) { handleDragStart(e, sample.id); }}
+                className={'sample-drag-wrapper' + (isFocused ? ' sample-focused' : '')}
+              >
+                <SampleCard
+                  sample={sample}
+                  onClick={function () { onSelectSample(sample); }}
+                  onSampleUpdate={onSampleUpdate}
+                  isSelected={selectedIds ? selectedIds.has(sample.id) : false}
+                  onToggleSelect={function () { if (onToggleSelect) onToggleSelect(sample.id); }}
+                />
+              </div>
+            );
+          })
         )}
       </div>
     </div>

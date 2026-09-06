@@ -1,0 +1,34 @@
+.presence-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.presence-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.presence-avatars {
+  display: flex;
+}
+
+.presence-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 2px solid var(--color-surface);
+  margin-left: -8px;
+}
+
+.presence-avatar:first-child {
+  margin-left: 0;
+}
