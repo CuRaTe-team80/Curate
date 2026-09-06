@@ -8,6 +8,7 @@ import Board from './components/Board'
 import BoardsList from './pages/BoardsList'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import Profile from './pages/Profile'
 import Register from './pages/Register'
 import { ToastProvider } from './context/ToastContext'
 import { AuthProvider } from './context/AuthContext'
@@ -36,9 +37,9 @@ function App() {
           {view === 'dashboard' && <Dashboard />}
           {view === 'login' && <Login onSuccess={() => setView('board')} />}
           {view === 'register' && <Register onSuccess={() => setView('board')} />}
-          <Footer />
-          <Toast />
-        </div>
+          {view === 'profile' && <Profile />}
+<Footer />
+<Toast />        </div>
       </ToastProvider>
     </AuthProvider>
   )
