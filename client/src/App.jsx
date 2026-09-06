@@ -7,6 +7,7 @@ import Landing from './pages/Landing'
 import Board from './components/Board'
 import BoardsList from './pages/BoardsList'
 import Dashboard from './pages/Dashboard'
+import Notifications from './pages/Notifications'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Register from './pages/Register'
@@ -29,17 +30,41 @@ function App() {
       <ToastProvider>
         <div className="app">
           <Navbar currentView={view} onNavigate={setView} />
+
           {view === 'landing' && (
-            <Landing onGetStarted={() => setView('boards')} onNavigate={setView} />
+            <Landing
+              onGetStarted={() => setView('boards')}
+              onNavigate={setView}
+            />
           )}
-          {view === 'boards' && <BoardsList onSelectBoard={handleSelectBoard} />}
-          {view === 'board' && <Board boardId={selectedBoard ? selectedBoard.id : null} />}
+
+          {view === 'boards' && (
+            <BoardsList onSelectBoard={handleSelectBoard} />
+          )}
+
+          {view === 'board' && (
+            <Board
+              boardId={selectedBoard ? selectedBoard.id : null}
+            />
+          )}
+
           {view === 'dashboard' && <Dashboard />}
-          {view === 'login' && <Login onSuccess={() => setView('board')} />}
-          {view === 'register' && <Register onSuccess={() => setView('board')} />}
+
+          {view === 'notifications' && <Notifications />}
+
+          {view === 'login' && (
+            <Login onSuccess={() => setView('board')} />
+          )}
+
+          {view === 'register' && (
+            <Register onSuccess={() => setView('board')} />
+          )}
+
           {view === 'profile' && <Profile />}
-<Footer />
-<Toast />        </div>
+
+          <Footer />
+          <Toast />
+        </div>
       </ToastProvider>
     </AuthProvider>
   )

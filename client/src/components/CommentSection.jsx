@@ -8,7 +8,7 @@ export default function CommentSection({ sampleId }) {
   useEffect(() => {
     async function fetchComments() {
       try {
-        const res = await fetch(${import.meta.env.VITE_API_URL}/samples/${sampleId});
+       const res = await fetch(`${import.meta.env.VITE_API_URL}/samples/${sampleId}`);
         const data = await res.json();
         if (data && data.comments) {
           setComments(data.comments);
@@ -26,8 +26,7 @@ export default function CommentSection({ sampleId }) {
 
     setLoading(true);
     try {
-      const res = await fetch(${import.meta.env.VITE_API_URL}/samples/${sampleId}/comments, {
-        method: 'POST',
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/samples/${sampleId}/comments`, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, user: 'Isuli' })
       });

@@ -1,5 +1,4 @@
-@"
-import { useState, useEffect, useMemo, useCallback } from 'react';
+﻿import { useState, useEffect, useMemo, useCallback } from 'react';
 import SearchFilterBar from './SearchFilterBar';
 import Column from './Column';
 import SampleDetail from './SampleDetail';
@@ -188,4 +187,3 @@ function Board(props) {
 }
 
 export default Board;
-"@ | Set-Content -Path "C:\Users\ISIWARA KUMARAGE\Documents\Curate\client\src\components\Board.jsx" -Encoding utf8
