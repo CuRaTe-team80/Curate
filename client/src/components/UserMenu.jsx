@@ -69,12 +69,23 @@ export default function UserMenu({ onNavigate }) {
         <span className="user-menu-email">{user.email}</span>
         <span className="user-menu-caret">▾</span>
       </button>
+
       {open && (
         <div className="user-menu-dropdown" role="menu">
           <div className="user-menu-dropdown__header">
             <span className="user-avatar user-avatar--lg" aria-hidden="true">{initial}</span>
             <span className="user-menu-dropdown__email">{user.email}</span>
           </div>
+          <button
+            className="user-menu-item"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false);
+              onNavigate && onNavigate('profile');
+            }}
+          >
+            Profile
+          </button>
           <button className="user-menu-item" role="menuitem" onClick={handleLogout}>
             Logout
           </button>
