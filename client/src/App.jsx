@@ -29,7 +29,12 @@ function App() {
     <AuthProvider>
       <ToastProvider>
         <div className="app">
-          <Navbar currentView={view} onNavigate={setView} />
+          <Navbar
+  currentView={view}
+  onNavigate={setView}
+  onSelectBoard={handleSelectBoard}
+  selectedBoard={selectedBoard}
+/>
 
           {view === 'landing' && (
             <Landing
