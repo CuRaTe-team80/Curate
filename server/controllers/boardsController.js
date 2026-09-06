@@ -22,4 +22,21 @@ const createBoard = async (req, res) => {
   }
 };
 
-module.exports = { getAllBoards, createBoard };
+const deleteBoard = async (req, res) => {
+  try {
+    const board = await Board.findByIdAndDelete(req.params.id);
+
+    if (!board) {
+      return res.status(404).json({ message: 'Board not found' });
+    }
+
+    res.status(200).json({ message: 'Board deleted', id: req.params.id });
+  } catch (err) {
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: 'Invalid board id.' });
+    }
+    res.status(500).json({ message: 'Failed to delete board' });
+  }
+};
+
+module.exports = { getAllBoards, createBoard, deleteBoard };

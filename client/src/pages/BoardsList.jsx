@@ -10,6 +10,7 @@ function BoardsList({ onSelectBoard }) {
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [creating, setCreating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     fetchBoards();
@@ -51,6 +52,24 @@ function BoardsList({ onSelectBoard }) {
       setError(err.message);
     } finally {
       setCreating(false);
+    }
+  }
+
+  async function handleDelete(e, boardId) {
+    e.stopPropagation(); // don't trigger onSelectBoard on the parent card
+
+    const confirmed = window.confirm('Delete this board? This cannot be undone.');
+    if (!confirmed) return;
+
+    setDeletingId(boardId);
+    try {
+      const res = await fetch(`${API_URL}/${boardId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete board');
+      setBoards((prev) => prev.filter((b) => b.id !== boardId));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -99,6 +118,15 @@ function BoardsList({ onSelectBoard }) {
             className="board-card card"
             onClick={() => onSelectBoard(board)}
           >
+            <button
+              type="button"
+              className="board-card-delete"
+              onClick={(e) => handleDelete(e, board.id)}
+              disabled={deletingId === board.id}
+              aria-label={`Delete ${board.name}`}
+            >
+              {deletingId === board.id ? '...' : '✕'}
+            </button>
             <h3>{board.name}</h3>
             {board.description && <p>{board.description}</p>}
           </button>
