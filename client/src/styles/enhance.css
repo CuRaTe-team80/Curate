@@ -117,3 +117,20 @@
 }
 .sample-focused { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius-md); }
 .board-shortcut-hint { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-bottom: var(--space-3); }
+/* Skeleton Loading Animations */
+@keyframes skeleton-pulse {
+  0% {
+    background-color: #f1f5f9;
+  }
+  50% {
+    background-color: #e2e8f0;
+  }
+  100% {
+    background-color: #f1f5f9;
+  }
+}
+
+.skeleton-box {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
