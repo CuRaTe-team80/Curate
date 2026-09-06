@@ -1,2 +1,22 @@
-﻿
+﻿.board-card {
+  position: relative;
+}
 
+.board-card-delete {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.board-card-delete:hover {
+  color: var(--color-danger);
+  background: var(--color-bg);
+}
