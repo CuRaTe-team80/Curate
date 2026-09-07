@@ -1,4 +1,3 @@
-
 // client/src/components/LabelPicker.jsx
 import { useState } from "react";
 import ConflictBanner from "./ConflictBanner";
@@ -28,45 +27,31 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
     setError(null);
 
     try {
-sprint8/m3-flag-unclear
       const response = await fetch(
-        ${import.meta.env.VITE_API_URL}/samples/${sampleId},
+        `${API_URL}/samples/${sampleId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             currentLabel: label,
-            isFlagged: false,
             clientUpdatedAt: lastKnownUpdatedAt,
           }),
         }
       );
-=======
-     const response = await fetch(
-  `${API_URL}/samples/${sampleId}`,
-  {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      currentLabel: label,
-      clientUpdatedAt: lastKnownUpdatedAt,
-    }),
-  }
-); main
 
       if (response.status === 409) {
-  const data = await response.json();
+        const data = await response.json();
 
-  setConflictSample(data.currentSample);
+        setConflictSample(data.currentSample);
 
-  showToast("Conflict detected: sample was updated by another user.", "warning");
+        showToast("Conflict detected: sample was updated by another user.", "warning");
 
-  setIsSaving(false);
-  return;
-}
+        setIsSaving(false);
+        return;
+      }
 
       if (!response.ok) {
-        throw new Error(Request failed with status ${response.status});
+        throw new Error(`Request failed with status ${response.status}`);
       }
 
       const data = await response.json();
@@ -95,7 +80,7 @@ sprint8/m3-flag-unclear
 
     try {
       const response = await fetch(
-        ${import.meta.env.VITE_API_URL}/samples/${sampleId},
+        `${API_URL}/samples/${sampleId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -114,7 +99,7 @@ sprint8/m3-flag-unclear
       }
 
       if (!response.ok) {
-        throw new Error(Request failed with status ${response.status});
+        throw new Error(`Request failed with status ${response.status}`);
       }
 
       const data = await response.json();
