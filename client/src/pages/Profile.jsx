@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import './Profile.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -95,17 +96,15 @@ export default function Profile() {
           <div className="auth-error-banner" role="alert">{fetchError}</div>
         ) : (
           <>
-            <div style={{ marginBottom: 'var(--space-5)' }}>
-              <p style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-1)' }}>Email</p>
-              <p style={{ color: 'var(--color-text)', fontWeight: 600 }}>{user?.email}</p>
+            <div className="profile-field">
+              <p className="profile-field-label">Email</p>
+              <p className="profile-field-value">{user?.email}</p>
             </div>
 
             {user?.createdAt && (
-              <div style={{ marginBottom: 'var(--space-6)' }}>
-                <p style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-1)' }}>
-                  Member since
-                </p>
-                <p style={{ color: 'var(--color-text)', fontWeight: 600 }}>
+              <div className="profile-field">
+                <p className="profile-field-label">Member since</p>
+                <p className="profile-field-value">
                   {new Date(user.createdAt).toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
@@ -117,23 +116,10 @@ export default function Profile() {
           </>
         )}
 
-        <h2 style={{ fontSize: '1.1rem', marginBottom: 'var(--space-4)', color: 'var(--color-text)' }}>
-          Change Password
-        </h2>
+        <h2 className="profile-section-heading">Change Password</h2>
 
         {passwordMessage && (
-          <div
-            style={{
-              background: 'var(--color-success)',
-              color: 'var(--color-surface)',
-              padding: 'var(--space-3)',
-              borderRadius: '6px',
-              marginBottom: 'var(--space-4)',
-              fontSize: '0.9rem',
-            }}
-          >
-            {passwordMessage}
-          </div>
+          <div className="profile-success-banner">{passwordMessage}</div>
         )}
         {passwordError && (
           <div className="auth-error-banner" role="alert">{passwordError}</div>

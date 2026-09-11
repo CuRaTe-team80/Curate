@@ -6,6 +6,12 @@
   padding: var(--space-5);
 }
 
+@media (min-height: 900px) {
+  .auth-page {
+    align-items: flex-start;
+    padding-top: 10vh;
+  }
+}
 .auth-card {
   width: 100%;
   max-width: 420px;
@@ -68,7 +74,7 @@
   height: 52px;
   padding: 1.25rem 1rem 0.25rem 1rem;
   background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text);
   font-size: 0.95rem;
