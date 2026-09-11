@@ -2,9 +2,11 @@
 import './BoardsList.css';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/boards';
+const SAMPLES_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/samples';
 
 function BoardsList({ onSelectBoard }) {
   const [boards, setBoards] = useState([]);
+  const [sampleCounts, setSampleCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newName, setNewName] = useState('');
@@ -26,11 +28,25 @@ function BoardsList({ onSelectBoard }) {
       .then((data) => {
         setBoards(data);
         setLoading(false);
+        fetchSampleCounts(data);
       })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
+  }
+
+  function fetchSampleCounts(boardList) {
+    boardList.forEach((board) => {
+      fetch(`${SAMPLES_URL}?boardId=${board.id}`)
+        .then((res) => (res.ok ? res.json() : []))
+        .then((samples) => {
+          setSampleCounts((prev) => ({ ...prev, [board.id]: samples.length }));
+        })
+        .catch(() => {
+          // If a count fails to load, just leave it unset rather than breaking the page
+        });
+    });
   }
 
   async function handleCreate(e) {
@@ -46,6 +62,7 @@ function BoardsList({ onSelectBoard }) {
       if (!res.ok) throw new Error('Failed to create board');
       const board = await res.json();
       setBoards((prev) => [board, ...prev]);
+      fetchSampleCounts([board]);
       setNewName('');
       setNewDescription('');
     } catch (err) {
@@ -56,7 +73,7 @@ function BoardsList({ onSelectBoard }) {
   }
 
   async function handleDelete(e, boardId) {
-    e.stopPropagation(); // don't trigger onSelectBoard on the parent card
+    e.stopPropagation();
 
     const confirmed = window.confirm('Delete this board? This cannot be undone.');
     if (!confirmed) return;
@@ -129,6 +146,11 @@ function BoardsList({ onSelectBoard }) {
             </button>
             <h3>{board.name}</h3>
             {board.description && <p>{board.description}</p>}
+            <span className="board-card-count">
+              {sampleCounts[board.id] !== undefined
+                ? `${sampleCounts[board.id]} sample${sampleCounts[board.id] === 1 ? '' : 's'}`
+                : '...'}
+            </span>
           </button>
         ))}
       </div>
