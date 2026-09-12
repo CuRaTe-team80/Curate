@@ -90,22 +90,12 @@ function Navbar(props) {
       <div className="navbar-links">
         <button
           type="button"
-          className={linkClass("boards")}
+          className={linkClass("boards") + (currentView === "board" ? " navbar-link--active" : "")}
           onClick={function () {
             onNavigate("boards");
           }}
         >
           Boards
-        </button>
-
-        <button
-          type="button"
-          className={linkClass("board")}
-          onClick={function () {
-            onNavigate("board");
-          }}
-        >
-          Board
         </button>
 
         <button
