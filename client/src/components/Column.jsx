@@ -16,10 +16,15 @@ function Column(props) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   function handleDragStart(e, sampleId) {
-    e.dataTransfer.setData('text/plain', sampleId);
-    e.dataTransfer.effectAllowed = 'move';
+  // Don't let a click on the checkbox or a label button start a drag
+  if (e.target.closest('input, button, .sample-select')) {
+    e.preventDefault();
+    return;
   }
-
+  e.dataTransfer.setData('text/plain', sampleId);
+  e.dataTransfer.effectAllowed = 'move';
+  }
+ 
   function handleDragOver(e) {
     e.preventDefault();
     setIsDragOver(true);

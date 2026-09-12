@@ -158,7 +158,6 @@ function Board(props) {
         setSamples(data);
         setLoading(false);
         setError(null);
-        clearCache();
       })
       .catch(function (fetchError) {
         if (!cached || cached.length === 0) {
