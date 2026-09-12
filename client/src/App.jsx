@@ -30,11 +30,11 @@ function App() {
       <ToastProvider>
         <div className="app">
           <Navbar
-  currentView={view}
-  onNavigate={setView}
-  onSelectBoard={handleSelectBoard}
-  selectedBoard={selectedBoard}
-/>
+            currentView={view}
+            onNavigate={setView}
+            onSelectBoard={handleSelectBoard}
+            selectedBoard={selectedBoard}
+          />
 
           {view === 'landing' && (
             <Landing
@@ -58,11 +58,11 @@ function App() {
           {view === 'notifications' && <Notifications />}
 
           {view === 'login' && (
-            <Login onSuccess={() => setView('board')} />
+            <Login onSuccess={() => setView('boards')} />
           )}
 
           {view === 'register' && (
-            <Register onSuccess={() => setView('board')} />
+            <Register onSuccess={() => setView('boards')} />
           )}
 
           {view === 'profile' && <Profile />}
