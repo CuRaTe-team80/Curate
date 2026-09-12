@@ -13,6 +13,7 @@ function BoardsList({ onSelectBoard }) {
   const [newDescription, setNewDescription] = useState('');
   const [creating, setCreating] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [newLabels, setNewLabels] = useState('Positive, Negative');
 
   useEffect(() => {
     fetchBoards();
@@ -57,7 +58,10 @@ function BoardsList({ onSelectBoard }) {
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newName.trim(), description: newDescription.trim() }),
+        body: JSON.stringify({
+  name: newName.trim(),
+  description: newDescription.trim(),
+  labels: newLabels.split(',').map((l) => l.trim()).filter(Boolean),}),
       });
       if (!res.ok) throw new Error('Failed to create board');
       const board = await res.json();
@@ -107,6 +111,14 @@ function BoardsList({ onSelectBoard }) {
           disabled={creating}
         />
         <input
+  className="input"
+  type="text"
+  placeholder="Labels, comma separated (e.g. Cat, Dog)"
+  value={newLabels}
+  onChange={(e) => setNewLabels(e.target.value)}
+  disabled={creating}
+/>
+        <input
           className="input"
           type="text"
           placeholder="Description (optional)"
@@ -114,6 +126,7 @@ function BoardsList({ onSelectBoard }) {
           onChange={(e) => setNewDescription(e.target.value)}
           disabled={creating}
         />
+
         <button className="btn btn-primary" type="submit" disabled={creating || !newName.trim()}>
           {creating ? 'Creating...' : 'Create board'}
         </button>

@@ -24,22 +24,17 @@ const sampleSchema = new mongoose.Schema(
     currentLabel: { type: String, default: null },
     status: { type: String, default: 'Unlabeled' },
     labeledBy: { type: String, default: null },
+    boardId: { type: String, default: null },
     history: { type: [historyEntrySchema], default: [] },
-    isFlagged: {
-      type: Boolean,
-      default: false
-    },
-    comments: {
-      type: [commentSchema],
-      default: [],
-    },
+    isFlagged: { type: Boolean, default: false },
+    comments: { type: [commentSchema], default: [] },
   },
   {
-    timestamps: true, // adds createdAt and updatedAt — Isuli's conflict detection needs updatedAt
+    timestamps: true,
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        ret.id = ret._id.toString(); // keep frontend's sample.id working unchanged
+        ret.id = ret._id.toString();
         delete ret._id;
         delete ret.__v;
       },

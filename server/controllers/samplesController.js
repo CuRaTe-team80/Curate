@@ -3,7 +3,11 @@ const Sample = require('../models/Sample'); // Ensure path matches your model
 // GET /api/samples
 const getAllSamples = async (req, res) => {
   try {
-    const samples = await Sample.find({});
+    const filter = {};
+    if (req.query.boardId) {
+      filter.boardId = req.query.boardId;
+    }
+    const samples = await Sample.find(filter);
     res.status(200).json(samples);
   } catch (err) {
     res.status(500).json({ message: 'Server error fetching samples', error: err.message });

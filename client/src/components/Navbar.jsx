@@ -34,27 +34,24 @@ function Navbar(props) {
   }, [dark]);
 
   useEffect(function () {
-    if (!selectedBoard || !selectedBoard.id) return;
+  if (!selectedBoard || !selectedBoard.id) return;
 
-    setRecentBoards(function (previousBoards) {
-      const updatedBoards = [
-        {
-          id: selectedBoard.id,
-          name: selectedBoard.name,
-        },
-        ...previousBoards.filter(function (board) {
-          return board.id !== selectedBoard.id;
-        }),
-      ].slice(0, 3);
+  setRecentBoards(function (previousBoards) {
+    const updatedBoards = [
+      selectedBoard, // store the whole board object, not just id/name
+      ...previousBoards.filter(function (board) {
+        return board.id !== selectedBoard.id;
+      }),
+    ].slice(0, 3);
 
-      localStorage.setItem(
-        RECENT_BOARDS_KEY,
-        JSON.stringify(updatedBoards)
-      );
+    localStorage.setItem(
+      RECENT_BOARDS_KEY,
+      JSON.stringify(updatedBoards)
+    );
 
-      return updatedBoards;
-    });
-  }, [selectedBoard]);
+    return updatedBoards;
+  });
+}, [selectedBoard]);
 
   function linkClass(name) {
     var base = "navbar-link";
@@ -99,14 +96,14 @@ function Navbar(props) {
         </button>
 
         <button
-          type="button"
-          className={linkClass("board")}
-          onClick={function () {
-            onNavigate("board");
-          }}
-        >
-          Board
-        </button>
+  type="button"
+  className={linkClass("board")}
+  onClick={function () {
+    onNavigate("board");
+  }}
+>
+  Board{selectedBoard ? ` — ${selectedBoard.name}` : ''}
+</button>
 
         <button
           type="button"
