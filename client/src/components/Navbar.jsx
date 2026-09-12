@@ -38,10 +38,7 @@ function Navbar(props) {
 
     setRecentBoards(function (previousBoards) {
       const updatedBoards = [
-        {
-          id: selectedBoard.id,
-          name: selectedBoard.name,
-        },
+        selectedBoard, // store the whole board object, not just id/name
         ...previousBoards.filter(function (board) {
           return board.id !== selectedBoard.id;
         }),

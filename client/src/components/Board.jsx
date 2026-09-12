@@ -14,6 +14,7 @@ import { useSocket } from '../hooks/useSocket';
 import { usePresence } from '../hooks/usePresence';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
+import AddSampleForm from './AddSampleForm';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const COLUMNS = ['Unlabeled', 'In Review', 'Labeled'];
@@ -34,8 +35,11 @@ function getEmailFromToken(t) {
   }
 }
 
+
+
 function Board(props) {
   const boardId = props.boardId;
+  const boardLabels = props.labels;
   const [samples, setSamples] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -83,6 +87,10 @@ function Board(props) {
   const clearSelection = useCallback(() => {
     setSelectedIds(new Set());
   }, []);
+
+  function handleSampleAdded(newSample) {
+  setSamples((prev) => [...prev, newSample]);
+}
 
   async function handleBulkApply(label) {
     const ids = Array.from(selectedIds);
@@ -217,56 +225,64 @@ function Board(props) {
   }, [flatOrder, focusedId]);
 
   if (loading) return <LoadingState />;
-  if (error) return <ErrorState message={error} />;
-  if (samples.length === 0) return <EmptyState />;
+if (error) return <ErrorState message={error} />;
 
-  return (
-    <div className="board">
-      <PresenceBar users={presenceUsers} />
+return (
+  <div className="board">
+    <PresenceBar users={presenceUsers} />
 
-      <p className="board-shortcut-hint">
-        Tip: use arrow keys to move between cards, press 1 or 2 to label the focused card.
-      </p>
+    <p className="board-shortcut-hint">
+      Tip: use arrow keys to move between cards, press 1 or 2 to label the focused card.
+    </p>
 
-      <div className="board-toolbar">
-        <SearchFilterBar
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          typeFilter={typeFilter}
-          onTypeFilterChange={setTypeFilter}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-        />
-        <ExportButton />
-      </div>
-
-      <div style={{ display: 'flex', gap: 'var(--space-5)' }}>
-        {COLUMNS.map(function (columnStatus) {
-          return (
-            <Column
-              key={columnStatus}
-              title={columnStatus}
-              status={columnStatus}
-              samples={filteredSamples.filter(function (sample) { return sample.status === columnStatus; })}
-              onSelectSample={setSelectedSample}
-              onSampleUpdate={handleSampleUpdate}
-              selectedIds={selectedIds}
-              onToggleSelect={toggleSelect}
-              focusedId={focusedId}
-            />
-          );
-        })}
-      </div>
-
-      <SampleDetail sample={selectedSample} onClose={() => setSelectedSample(null)} />
-
-      <BulkActionBar
-        selectedCount={selectedIds.size}
-        onApplyLabel={handleBulkApply}
-        onClear={clearSelection}
+    <div className="board-toolbar">
+      <SearchFilterBar
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        typeFilter={typeFilter}
+        onTypeFilterChange={setTypeFilter}
+        statusFilter={statusFilter}
+        onStatusFilterChange={setStatusFilter}
       />
+      <ExportButton />
     </div>
-  );
+
+    <AddSampleForm boardId={boardId} onSampleAdded={handleSampleAdded} />
+
+    {samples.length === 0 ? (
+      <EmptyState />
+    ) : (
+      <>
+        <div style={{ display: 'flex', gap: 'var(--space-5)' }}>
+          {COLUMNS.map(function (columnStatus) {
+            return (
+              <Column
+                key={columnStatus}
+                title={columnStatus}
+                status={columnStatus}
+                samples={filteredSamples.filter(function (sample) { return sample.status === columnStatus; })}
+                onSelectSample={setSelectedSample}
+                onSampleUpdate={handleSampleUpdate}
+                selectedIds={selectedIds}
+                onToggleSelect={toggleSelect}
+                focusedId={focusedId}
+                labels={boardLabels}
+              />
+            );
+          })}
+        </div>
+
+        <SampleDetail sample={selectedSample} onClose={() => setSelectedSample(null)} />
+
+        <BulkActionBar
+          selectedCount={selectedIds.size}
+          onApplyLabel={handleBulkApply}
+          onClear={clearSelection}
+        />
+      </>
+    )}
+  </div>
+);
 }
 
 export default Board;

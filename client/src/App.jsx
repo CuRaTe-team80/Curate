@@ -25,6 +25,8 @@ function App() {
     setView('board')
   }
 
+  
+
   return (
     <AuthProvider>
       <ToastProvider>
@@ -48,10 +50,11 @@ function App() {
           )}
 
           {view === 'board' && (
-            <Board
-              boardId={selectedBoard ? selectedBoard.id : null}
-            />
-          )}
+  <Board
+    boardId={selectedBoard ? selectedBoard.id : null}
+    labels={selectedBoard ? selectedBoard.labels : null}
+  />
+)}
 
           {view === 'dashboard' && <Dashboard />}
 

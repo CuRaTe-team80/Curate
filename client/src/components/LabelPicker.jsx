@@ -1,19 +1,13 @@
-// client/src/components/LabelPicker.jsx
 import { useState } from "react";
 import ConflictBanner from "./ConflictBanner";
 import { useToast } from "../context/ToastContext";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const DEFAULT_LABELS = ["Positive", "Negative", "Cat", "Dog"];
 
-const LABELS = [
-  { name: "Positive", icon: "\u2713", color: "var(--color-success)" },
-  { name: "Negative", icon: "\u2717", color: "var(--color-danger)" },
-  { name: "Cat", icon: "\uD83D\uDC31", color: "var(--color-accent)" },
-  { name: "Dog", icon: "\uD83D\uDC36", color: "var(--color-accent)" },
-];
-
-function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
+function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate, labels }) {
   const { showToast } = useToast();
+  const labelOptions = labels && labels.length > 0 ? labels : DEFAULT_LABELS;
 
   const [selectedLabel, setSelectedLabel] = useState(null);
   const [isFlagged, setIsFlagged] = useState(false);
@@ -22,39 +16,30 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
+  async function sendPatch(body) {
+    const response = await fetch(`${API_URL}/samples/${sampleId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...body, clientUpdatedAt: lastKnownUpdatedAt }),
+    });
+
+    if (response.status === 409) {
+      const data = await response.json();
+      setConflictSample(data.currentSample);
+      showToast("Conflict detected: sample was updated by another user.", "warning");
+      return null;
+    }
+
+    if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+    return response.json();
+  }
+
   async function handleLabelClick(label) {
     setIsSaving(true);
     setError(null);
-
     try {
-      const response = await fetch(
-        `${API_URL}/samples/${sampleId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentLabel: label,
-            clientUpdatedAt: lastKnownUpdatedAt,
-          }),
-        }
-      );
-
-      if (response.status === 409) {
-        const data = await response.json();
-
-        setConflictSample(data.currentSample);
-
-        showToast("Conflict detected: sample was updated by another user.", "warning");
-
-        setIsSaving(false);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await sendPatch({ currentLabel: label, status: "In Review" });
+      if (!data) { setIsSaving(false); return; }
 
       setSelectedLabel(data.currentLabel ?? label);
       setIsFlagged(false);
@@ -62,10 +47,7 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
       setConflictSample(null);
 
       showToast("Label saved", "success");
-
-      if (onSampleUpdate) {
-        onSampleUpdate(data);
-      }
+      if (onSampleUpdate) onSampleUpdate(data);
     } catch (err) {
       setError("Could not save label. Please try again.");
       showToast("Error saving label", "error");
@@ -77,32 +59,9 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
   async function handleFlagClick() {
     setIsSaving(true);
     setError(null);
-
     try {
-      const response = await fetch(
-        `${API_URL}/samples/${sampleId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            isFlagged: true,
-            clientUpdatedAt: lastKnownUpdatedAt,
-          }),
-        }
-      );
-
-      if (response.status === 409) {
-        const data = await response.json();
-        setConflictSample(data.currentSample);
-        setIsSaving(false);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await sendPatch({ isFlagged: true, status: "In Review" });
+      if (!data) { setIsSaving(false); return; }
 
       setIsFlagged(true);
       setSelectedLabel(null);
@@ -110,10 +69,7 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
       setConflictSample(null);
 
       showToast("Sample flagged as unclear", "success");
-
-      if (onSampleUpdate) {
-        onSampleUpdate(data);
-      }
+      if (onSampleUpdate) onSampleUpdate(data);
     } catch (err) {
       setError("Could not flag sample. Please try again.");
       showToast("Error flagging sample", "error");
@@ -128,41 +84,18 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
     setIsFlagged(conflictSample.isFlagged ?? false);
     setLastKnownUpdatedAt(conflictSample.updatedAt);
     setConflictSample(null);
-    if (onSampleUpdate) {
-      onSampleUpdate(conflictSample);
-    }
+    if (onSampleUpdate) onSampleUpdate(conflictSample);
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "var(--space-3)",
-      }}
-    >
-      <ConflictBanner
-        isVisible={Boolean(conflictSample)}
-        onRefresh={handleRefresh}
-      />
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+      <ConflictBanner isVisible={Boolean(conflictSample)} onRefresh={handleRefresh} />
 
-      {error && (
-        <p style={{ margin: 0, color: "var(--color-danger)" }}>
-          {error}
-        </p>
-      )}
+      {error && <p style={{ margin: 0, color: "var(--color-danger)" }}>{error}</p>}
 
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "var(--space-2)",
-          alignItems: "center",
-        }}
-      >
-        {LABELS.map(({ name, icon, color }) => {
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-2)", alignItems: "center" }}>
+        {labelOptions.map((name) => {
           const isActive = selectedLabel === name && !isFlagged;
-
           return (
             <button
               key={name}
@@ -171,57 +104,32 @@ function LabelPicker({ sampleId, sampleUpdatedAt, onSampleUpdate }) {
               className="btn"
               onClick={() => handleLabelClick(name)}
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "var(--space-1)",
-                backgroundColor: isActive
-                  ? "var(--color-primary)"
-                  : "var(--color-surface)",
-                border: `1px solid ${
-                  isActive ? "var(--color-primary)" : color
-                }`,
-                color: isActive
-                  ? "var(--color-surface)"
-                  : color,
+                backgroundColor: isActive ? "var(--color-primary)" : "var(--color-surface)",
+                border: `1px solid ${isActive ? "var(--color-primary)" : "var(--color-border)"}`,
+                color: isActive ? "var(--color-surface)" : "var(--color-text)",
                 opacity: isSaving ? 0.6 : 1,
                 cursor: isSaving ? "not-allowed" : "pointer",
               }}
             >
-              <span aria-hidden="true" style={{ fontSize: "0.9em" }}>
-                {icon}
-              </span>
               {name}
             </button>
           );
         })}
 
-        {/* Flag as unclear button */}
         <button
           type="button"
           disabled={isSaving}
           className="btn"
           onClick={handleFlagClick}
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "var(--space-1)",
-            backgroundColor: isFlagged
-              ? "var(--color-warning, #f59e0b)"
-              : "var(--color-surface)",
-            border: `1px solid ${
-              isFlagged ? "var(--color-warning, #f59e0b)" : "var(--color-text-muted, #9ca3af)"
-            }`,
-            color: isFlagged
-              ? "#fff"
-              : "var(--color-text, #374151)",
+            backgroundColor: isFlagged ? "var(--color-warning, #f59e0b)" : "var(--color-surface)",
+            border: `1px solid ${isFlagged ? "var(--color-warning, #f59e0b)" : "var(--color-text-muted)"}`,
+            color: isFlagged ? "#fff" : "var(--color-text)",
             opacity: isSaving ? 0.6 : 1,
             cursor: isSaving ? "not-allowed" : "pointer",
           }}
         >
-          <span aria-hidden="true" style={{ fontSize: "0.9em" }}>
-            🚩
-          </span>
-          Flag as unclear
+          🚩 Flag as unclear
         </button>
       </div>
     </div>

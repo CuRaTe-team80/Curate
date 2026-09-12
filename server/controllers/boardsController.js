@@ -10,12 +10,16 @@ const getAllBoards = async (req, res) => {
 };
 
 const createBoard = async (req, res) => {
-  const { name, description } = req.body;
+  const { name, description, labels } = req.body;
   if (!name) {
     return res.status(400).json({ message: 'name is required' });
   }
   try {
-    const newBoard = await Board.create({ name, description: description || '' });
+    const newBoard = await Board.create({
+      name,
+      description: description || '',
+      labels: labels && labels.length > 0 ? labels : undefined, // undefined lets schema default apply if empty
+    });
     res.status(201).json(newBoard);
   } catch (err) {
     res.status(500).json({ message: 'Failed to create board' });

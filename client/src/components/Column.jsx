@@ -11,7 +11,7 @@ function Column(props) {
   const selectedIds = props.selectedIds;
   const onToggleSelect = props.onToggleSelect;
   const focusedId = props.focusedId;
-
+ const labels = props.labels;
   const slug = title.toLowerCase().replace(/\s+/g, '-');
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -87,6 +87,7 @@ function Column(props) {
                   onSampleUpdate={onSampleUpdate}
                   isSelected={selectedIds ? selectedIds.has(sample.id) : false}
                   onToggleSelect={function () { if (onToggleSelect) onToggleSelect(sample.id); }}
+                  labels={labels}
                 />
               </div>
             );
