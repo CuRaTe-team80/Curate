@@ -80,7 +80,6 @@ export default function UserMenu({ onNavigate }) {
         <span className="user-menu-email">{user.email}</span>
         <span className="user-menu-caret">▾</span>
       </button>
-
       {open && (
         <div className="user-menu-dropdown" role="menu">
           <div className="user-menu-dropdown__header">
