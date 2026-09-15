@@ -1,16 +1,55 @@
-/* Container & Background Design */
+/* Minimalist Circuit / Tech Node Variables */
+:root {
+  --notif-bg: #f8fafc;
+  --notif-card-bg: rgba(255, 255, 255, 0.88);
+  --notif-border: rgba(16, 185, 129, 0.22);
+  --notif-text: #0f172a;
+  --notif-text-muted: #64748b;
+  --notif-chip-bg: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --notif-bg: #0d1117;
+    --notif-card-bg: rgba(22, 27, 34, 0.85);
+    --notif-border: rgba(16, 185, 129, 0.2);
+    --notif-text: #f0f6fc;
+    --notif-text-muted: #8b949e;
+    --notif-chip-bg: rgba(22, 27, 34, 0.7);
+  }
+}
+
+[data-theme="dark"] {
+  --notif-bg: #0d1117;
+  --notif-card-bg: rgba(22, 27, 34, 0.85);
+  --notif-border: rgba(16, 185, 129, 0.2);
+  --notif-text: #f0f6fc;
+  --notif-text-muted: #8b949e;
+  --notif-chip-bg: rgba(22, 27, 34, 0.7);
+}
+
+[data-theme="light"] {
+  --notif-bg: #f8fafc;
+  --notif-card-bg: rgba(255, 255, 255, 0.88);
+  --notif-border: rgba(16, 185, 129, 0.22);
+  --notif-text: #0f172a;
+  --notif-text-muted: #64748b;
+  --notif-chip-bg: rgba(255, 255, 255, 0.8);
+}
+
+/* Page Layout & Background Pattern */
 .notifications-wrapper {
   position: relative;
   min-height: calc(100vh - 80px);
   width: 100%;
   padding: 2.5rem 1rem;
   box-sizing: border-box;
-  background-color: var(--color-bg, #0b1319);
-  /* Matching SVG Doodle Pattern and Ambient Radial Glow */
+  background-color: var(--notif-bg);
+  /* Connected Circuit Nodes Pattern */
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(14, 124, 134, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(14, 124, 134, 0.1) 0%, transparent 45%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230e7c86' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 15% 25%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2310b981' stroke-width='1' stroke-opacity='0.12'%3E%3Cpath d='M0 40h30l10 10h40M40 0v30l10 10v40'/%3E%3Ccircle cx='40' cy='40' r='3' fill='%2310b981' fill-opacity='0.2'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%2310b981' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E");
   transition: background-color 0.3s ease;
 }
 
@@ -19,7 +58,7 @@
   margin: 0 auto;
 }
 
-/* Header Styles */
+/* Header */
 .notifications-header {
   display: flex;
   align-items: flex-end;
@@ -30,7 +69,7 @@
 
 .notifications-eyebrow {
   margin-bottom: 0.25rem;
-  color: #0e7c86;
+  color: #10b981;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -40,12 +79,12 @@
   margin: 0 0 0.35rem 0;
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text-main, #f5fbfb);
+  color: var(--notif-text);
 }
 
 .notifications-subtitle {
   margin: 0;
-  color: var(--color-text-muted, #8fb3b6);
+  color: var(--notif-text-muted);
   font-size: 0.95rem;
 }
 
@@ -54,10 +93,10 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.875rem;
-  background: var(--color-bg-card, rgba(21, 34, 43, 0.7));
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  background: var(--notif-card-bg);
+  border: 1px solid var(--notif-border);
   border-radius: 8px;
-  color: var(--color-text-muted, #8fb3b6);
+  color: var(--notif-text-muted);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -71,7 +110,7 @@
   background: rgba(239, 68, 68, 0.08);
 }
 
-/* Filter Chips */
+/* Tech Filter Chips */
 .notifications-filters {
   display: flex;
   gap: 0.5rem;
@@ -84,9 +123,9 @@
   gap: 0.375rem;
   padding: 0.4rem 0.85rem;
   border-radius: 20px;
-  background: var(--color-bg-card, rgba(21, 34, 43, 0.6));
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
-  color: var(--color-text-muted, #8fb3b6);
+  background: var(--notif-chip-bg);
+  border: 1px solid var(--notif-border);
+  color: var(--notif-text-muted);
   font-size: 0.825rem;
   font-weight: 500;
   cursor: pointer;
@@ -94,13 +133,13 @@
 }
 
 .filter-chip:hover {
-  background: rgba(14, 124, 134, 0.15);
-  color: var(--color-text-main, #f5fbfb);
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--notif-text);
 }
 
 .filter-chip.active {
-  background: #0e7c86;
-  border-color: #0e7c86;
+  background: #10b981;
+  border-color: #10b981;
   color: #ffffff;
 }
 
@@ -108,19 +147,19 @@
   font-size: 0.75rem;
   padding: 1px 6px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Glassmorphism Feed Box */
+/* Circuit Glass Card Feed */
 .notifications-feed {
   max-height: 580px;
   overflow-y: auto;
-  background: var(--color-bg-card, rgba(21, 34, 43, 0.75));
+  background: var(--notif-card-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--color-border, rgba(255, 255, 255, 0.12));
+  border: 1px solid var(--notif-border);
   border-radius: 16px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(16, 185, 129, 0.04);
 }
 
 .notifications-feed::-webkit-scrollbar {
@@ -128,17 +167,17 @@
 }
 
 .notifications-feed::-webkit-scrollbar-thumb {
-  background: var(--color-border, rgba(255, 255, 255, 0.15));
+  background: var(--notif-border);
   border-radius: 999px;
 }
 
-/* Item Design */
+/* Feed List Items */
 .activity-item {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--notif-border);
   transition: background 0.2s ease;
 }
 
@@ -147,7 +186,7 @@
 }
 
 .activity-item:hover {
-  background: rgba(14, 124, 134, 0.08);
+  background: rgba(16, 185, 129, 0.06);
 }
 
 .activity-icon {
@@ -157,21 +196,21 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: rgba(14, 124, 134, 0.15);
-  border: 1px solid rgba(14, 124, 134, 0.3);
-  color: #38bdf8;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
 }
 
 .activity-item--error .activity-icon {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  color: #ef4444;
 }
 
 .activity-item--warning .activity-icon {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(245, 158, 11, 0.12);
   border-color: rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+  color: #f59e0b;
 }
 
 .activity-content {
@@ -181,13 +220,13 @@
 
 .activity-message {
   margin: 0 0 0.25rem 0;
-  color: var(--color-text-main, #f5fbfb);
+  color: var(--notif-text);
   font-size: 0.925rem;
   line-height: 1.4;
 }
 
 .activity-time {
-  color: var(--color-text-muted, #8fb3b6);
+  color: var(--notif-text-muted);
   font-size: 0.775rem;
 }
 
@@ -195,11 +234,11 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #0e7c86;
+  background-color: #10b981;
   flex-shrink: 0;
 }
 
-/* Enhanced Empty State */
+/* Empty State Illustration */
 .notifications-empty {
   display: flex;
   min-height: 320px;
@@ -220,7 +259,7 @@
   position: absolute;
   inset: -8px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(14, 124, 134, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
 }
 
 .notifications-empty-icon {
@@ -229,24 +268,24 @@
   height: 60px;
   place-items: center;
   border-radius: 50%;
-  background: rgba(14, 124, 134, 0.15);
-  border: 1px solid rgba(14, 124, 134, 0.3);
-  color: #0e7c86;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
 }
 
 .notifications-empty h2 {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
-  color: var(--color-text-main, #f5fbfb);
+  color: var(--notif-text);
 }
 
 .notifications-empty p {
   margin: 0;
-  color: var(--color-text-muted, #8fb3b6);
+  color: var(--notif-text-muted);
   font-size: 0.9rem;
 }
 
-/* Mobile Responsiveness */
+/* Responsive */
 @media (max-width: 640px) {
   .notifications-wrapper {
     padding: 1.5rem 0.5rem;

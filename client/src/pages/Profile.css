@@ -1,13 +1,13 @@
-/* Base Light Theme Default */
+/* Minimalist Circuit / Tech Node Variables */
 :root {
+  --circuit-node-color: %2310b981; /* Mint Green */
   --profile-bg: #f8fafc;
-  --profile-card-bg: rgba(255, 255, 255, 0.85);
-  --profile-border: rgba(226, 232, 240, 0.8);
+  --profile-card-bg: rgba(255, 255, 255, 0.88);
+  --profile-border: rgba(16, 185, 129, 0.25);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
-  --profile-pattern-opacity: 0.05;
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -16,17 +16,16 @@
   --profile-success-text: #065f46;
 }
 
-/* Dark Theme Support via OS Preference */
+/* Dark Theme Support (OS & Manual Attribute) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --profile-bg: #0b1319;
-    --profile-card-bg: rgba(21, 34, 43, 0.85);
-    --profile-border: rgba(255, 255, 255, 0.12);
-    --profile-text: #f5fbfb;
-    --profile-text-muted: #8fb3b6;
-    --profile-input-bg: #0d1a21;
-    --profile-input-border: rgba(255, 255, 255, 0.18);
-    --profile-pattern-opacity: 0.04;
+    --profile-bg: #0d1117;
+    --profile-card-bg: rgba(22, 27, 34, 0.85);
+    --profile-border: rgba(16, 185, 129, 0.2);
+    --profile-text: #f0f6fc;
+    --profile-text-muted: #8b949e;
+    --profile-input-bg: #161b22;
+    --profile-input-border: rgba(255, 255, 255, 0.15);
     --profile-error-bg: rgba(239, 68, 68, 0.18);
     --profile-error-border: #f87171;
     --profile-error-text: #fca5a5;
@@ -36,16 +35,14 @@
   }
 }
 
-/* Explicit Theme Overrides */
 [data-theme="dark"] {
-  --profile-bg: #0b1319;
-  --profile-card-bg: rgba(21, 34, 43, 0.85);
-  --profile-border: rgba(255, 255, 255, 0.12);
-  --profile-text: #f5fbfb;
-  --profile-text-muted: #8fb3b6;
-  --profile-input-bg: #0d1a21;
-  --profile-input-border: rgba(255, 255, 255, 0.18);
-  --profile-pattern-opacity: 0.04;
+  --profile-bg: #0d1117;
+  --profile-card-bg: rgba(22, 27, 34, 0.85);
+  --profile-border: rgba(16, 185, 129, 0.2);
+  --profile-text: #f0f6fc;
+  --profile-text-muted: #8b949e;
+  --profile-input-bg: #161b22;
+  --profile-input-border: rgba(255, 255, 255, 0.15);
   --profile-error-bg: rgba(239, 68, 68, 0.18);
   --profile-error-border: #f87171;
   --profile-error-text: #fca5a5;
@@ -56,13 +53,12 @@
 
 [data-theme="light"] {
   --profile-bg: #f8fafc;
-  --profile-card-bg: rgba(255, 255, 255, 0.85);
-  --profile-border: rgba(226, 232, 240, 0.8);
+  --profile-card-bg: rgba(255, 255, 255, 0.88);
+  --profile-border: rgba(16, 185, 129, 0.25);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
-  --profile-pattern-opacity: 0.05;
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -71,7 +67,7 @@
   --profile-success-text: #065f46;
 }
 
-/* Page Layout with Doodle Pattern Overlay */
+/* Minimalist Circuit / Tech Node Overlay */
 .profile-container {
   position: relative;
   display: flex;
@@ -79,38 +75,40 @@
   align-items: center;
   min-height: calc(100vh - 80px);
   padding: 2.5rem 1rem;
-  background-color: var(--color-bg, var(--profile-bg));
-  /* Professional SVG Doodle Pattern Overlay */
-  background-image: radial-gradient(circle at 15% 20%, rgba(14, 124, 134, 0.08) 0%, transparent 40%),
-                    radial-gradient(circle at 85% 80%, rgba(14, 124, 134, 0.08) 0%, transparent 40%),
-                    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230e7c86' fill-opacity='0.12'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-color: var(--profile-bg);
+  /* Tech Circuit Grid + Node Radial Glow */
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2310b981' stroke-width='1' stroke-opacity='0.12'%3E%3Cpath d='M0 40h30l10 10h40M40 0v30l10 10v40'/%3E%3Ccircle cx='40' cy='40' r='3' fill='%2310b981' fill-opacity='0.2'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%2310b981' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E");
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Glassmorphism Card Style */
+/* Glass Card with Tech Accent */
 .profile-card {
   position: relative;
   width: 100%;
   max-width: 480px;
   padding: 2rem;
-  background-color: var(--color-bg-card, var(--profile-card-bg));
+  background-color: var(--profile-card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--color-border, var(--profile-border));
+  border: 1px solid var(--profile-border);
   border-radius: 16px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(16, 185, 129, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
 .profile-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.12), 0 6px 16px -2px rgba(0, 0, 0, 0.04);
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.15), 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 .profile-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--color-text-main, var(--profile-text));
+  color: var(--profile-text);
   margin-bottom: 1.25rem;
   letter-spacing: -0.02em;
 }
@@ -129,20 +127,20 @@
 }
 
 .profile-field-label {
-  color: var(--color-text-muted, var(--profile-text-muted));
+  color: var(--profile-text-muted);
   font-size: 0.85rem;
   font-weight: 500;
 }
 
 .profile-field-value {
-  color: var(--color-text-main, var(--profile-text));
+  color: var(--profile-text);
   font-weight: 600;
   font-size: 1rem;
 }
 
 .profile-divider {
   border: 0;
-  border-top: 1px solid var(--color-border, var(--profile-border));
+  border-top: 1px solid var(--profile-border);
   margin: 1.5rem 0;
 }
 
@@ -150,7 +148,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--color-text-main, var(--profile-text));
+  color: var(--profile-text);
   letter-spacing: -0.01em;
 }
 
@@ -167,7 +165,7 @@
 }
 
 .profile-form label {
-  color: var(--color-text-main, var(--profile-text));
+  color: var(--profile-text);
   font-size: 0.875rem;
   font-weight: 500;
   display: block;
@@ -177,9 +175,9 @@
   width: 100%;
   padding: 10px 14px;
   border-radius: 8px;
-  border: 1px solid var(--color-border, var(--profile-input-border));
-  background-color: var(--color-bg-input, var(--profile-input-bg));
-  color: var(--color-text-main, var(--profile-text));
+  border: 1px solid var(--profile-input-border);
+  background-color: var(--profile-input-bg);
+  color: var(--profile-text);
   box-sizing: border-box;
   font-size: 0.95rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -187,8 +185,8 @@
 
 .profile-form .input:focus {
   outline: none;
-  border-color: #0e7c86;
-  box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.2);
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .profile-submit {
@@ -197,9 +195,18 @@
   padding: 10px 16px;
   border-radius: 8px;
   font-weight: 600;
+  background-color: #10b981;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-/* Banners */
+.profile-submit:hover {
+  background-color: #059669;
+}
+
+/* Alert Banners */
 .profile-error-banner {
   background-color: var(--profile-error-bg);
   border: 1px solid var(--profile-error-border);
