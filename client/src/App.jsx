@@ -3,6 +3,7 @@ import './styles/theme.css'
 import './styles/enhance.css'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import SplashScreen from './components/SplashScreen'
 import Landing from './pages/Landing'
 import Board from './components/Board'
 import BoardsList from './pages/BoardsList'
@@ -19,13 +20,16 @@ import { useState } from 'react'
 function App() {
   const [view, setView] = useState('landing')
   const [selectedBoard, setSelectedBoard] = useState(null)
+  const [showSplash, setShowSplash] = useState(true)
 
   function handleSelectBoard(board) {
     setSelectedBoard(board)
     setView('board')
   }
 
-  
+  if (showSplash) {
+    return <SplashScreen onFinish={function () { setShowSplash(false); }} />
+  }
 
   return (
     <AuthProvider>
@@ -50,11 +54,10 @@ function App() {
           )}
 
           {view === 'board' && (
-  <Board
-    boardId={selectedBoard ? selectedBoard.id : null}
-    labels={selectedBoard ? selectedBoard.labels : null}
-  />
-)}
+            <Board
+              boardId={selectedBoard ? selectedBoard.id : null}
+            />
+          )}
 
           {view === 'dashboard' && <Dashboard />}
 
