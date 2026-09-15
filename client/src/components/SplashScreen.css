@@ -1,4 +1,59 @@
-﻿.splash-screen {
+﻿/* Curate App Palette Alignment & Dual Theme Variables */
+:root {
+  --splash-bg: #f8fafc;
+  --splash-text: #0f172a;
+  --splash-text-muted: #64748b;
+  --splash-accent: #0284c7;
+  --splash-accent-bright: #38bdf8;
+  --splash-glow-color: rgba(2, 132, 199, 0.25);
+  --splash-grid-line: rgba(2, 132, 199, 0.04);
+  --splash-diamond-outer: rgba(2, 132, 199, 0.2);
+  --splash-diamond-mid: rgba(2, 132, 199, 0.4);
+  --splash-neon-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(2, 132, 199, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --splash-bg: #0b1319;
+    --splash-text: #f8fafc;
+    --splash-text-muted: #94a3b8;
+    --splash-accent: #38bdf8;
+    --splash-accent-bright: #38bdf8;
+    --splash-glow-color: rgba(56, 189, 248, 0.28);
+    --splash-grid-line: rgba(56, 189, 248, 0.03);
+    --splash-diamond-outer: rgba(56, 189, 248, 0.25);
+    --splash-diamond-mid: rgba(56, 189, 248, 0.5);
+    --splash-neon-shadow: 0 0 15px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3);
+  }
+}
+
+[data-theme="dark"] {
+  --splash-bg: #0b1319;
+  --splash-text: #f8fafc;
+  --splash-text-muted: #94a3b8;
+  --splash-accent: #38bdf8;
+  --splash-accent-bright: #38bdf8;
+  --splash-glow-color: rgba(56, 189, 248, 0.28);
+  --splash-grid-line: rgba(56, 189, 248, 0.03);
+  --splash-diamond-outer: rgba(56, 189, 248, 0.25);
+  --splash-diamond-mid: rgba(56, 189, 248, 0.5);
+  --splash-neon-shadow: 0 0 15px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3);
+}
+
+[data-theme="light"] {
+  --splash-bg: #f8fafc;
+  --splash-text: #0f172a;
+  --splash-text-muted: #64748b;
+  --splash-accent: #0284c7;
+  --splash-accent-bright: #38bdf8;
+  --splash-glow-color: rgba(2, 132, 199, 0.25);
+  --splash-grid-line: rgba(2, 132, 199, 0.04);
+  --splash-diamond-outer: rgba(2, 132, 199, 0.2);
+  --splash-diamond-mid: rgba(2, 132, 199, 0.4);
+  --splash-neon-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(2, 132, 199, 0.2);
+}
+
+.splash-screen {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -7,9 +62,14 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
-  background: radial-gradient(circle at 50% 40%, #0e2a2d 0%, #05141a 70%, #030b0e 100%);
+  background-color: var(--splash-bg);
+  background-image: 
+    radial-gradient(circle at 50% 45%, var(--splash-glow-color) 0%, transparent 65%),
+    linear-gradient(to right, var(--splash-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--splash-grid-line) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
   animation: splashIn 0.4s ease both;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, background-color 0.3s ease;
 }
 
 .splash-fade-out {
@@ -22,34 +82,37 @@
   to { opacity: 1; }
 }
 
+/* Pulsing Ambient Radial Glow */
 .splash-glow {
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: 480px;
+  height: 480px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(79, 208, 219, 0.25) 0%, transparent 70%);
-  filter: blur(10px);
+  background: radial-gradient(circle, var(--splash-glow-color) 0%, transparent 70%);
+  filter: blur(16px);
   animation: splashPulse 2.4s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes splashPulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.15); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.18); opacity: 0.95; }
 }
 
+/* SVG Diamond Logo Mark */
 .splash-mark {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 88px;
-  height: 88px;
+  width: 96px;
+  height: 96px;
   animation: splashMarkIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .splash-mark svg {
   display: block;
+  filter: drop-shadow(0 0 10px var(--splash-glow-color));
 }
 
 @keyframes splashMarkIn {
@@ -60,21 +123,35 @@
 .splash-diamond {
   transform-origin: center;
 }
-.splash-diamond-1 { animation: splashDrift 3s ease-in-out infinite; }
-.splash-diamond-2 { animation: splashDrift 3s ease-in-out 0.15s infinite; }
-.splash-diamond-3 { animation: splashDrift 3s ease-in-out 0.3s infinite; }
+
+.splash-diamond-1 {
+  fill: var(--splash-diamond-outer);
+  animation: splashDrift 3s ease-in-out infinite;
+}
+
+.splash-diamond-2 {
+  fill: var(--splash-diamond-mid);
+  animation: splashDrift 3s ease-in-out 0.15s infinite;
+}
+
+.splash-diamond-3 {
+  fill: var(--splash-accent);
+  animation: splashDrift 3s ease-in-out 0.3s infinite;
+}
 
 @keyframes splashDrift {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.75; }
 }
 
+/* Attractive Big Neon Text */
 .splash-name {
   position: relative;
-  font-size: 2.4rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #f5fbfb;
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--splash-text);
+  text-shadow: var(--splash-neon-shadow);
   margin: 0;
   text-align: center;
   animation: splashTextIn 0.6s ease 0.2s both;
@@ -82,40 +159,45 @@
 
 .splash-tagline {
   position: relative;
-  font-size: 0.95rem;
-  color: #8fb3b6;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--splash-text-muted);
   margin: 0;
   text-align: center;
+  letter-spacing: -0.01em;
   animation: splashTextIn 0.6s ease 0.35s both;
 }
 
 @keyframes splashTextIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Bouncing Cyan Dots */
 .splash-dots {
   position: relative;
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 10px;
+  margin-top: 12px;
   justify-content: center;
   animation: splashTextIn 0.6s ease 0.5s both;
 }
 
 .splash-dot {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: #4fd0db;
+  background: var(--splash-accent);
+  box-shadow: 0 0 8px var(--splash-accent);
   animation: splashDotBounce 1.2s ease-in-out infinite;
 }
+
 .splash-dot:nth-child(2) { animation-delay: 0.15s; }
 .splash-dot:nth-child(3) { animation-delay: 0.3s; }
 
 @keyframes splashDotBounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
-  40% { transform: translateY(-8px); opacity: 1; }
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-10px); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
