@@ -99,7 +99,6 @@ export default function Login({ onSuccess }) {
             />
             {errors.password && <span className="field-error">{errors.password}</span>}
           </div>
-
           <button className="btn btn-primary auth-submit" type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Log In'}
           </button>
