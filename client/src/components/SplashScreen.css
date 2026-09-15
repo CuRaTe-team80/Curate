@@ -1,56 +1,58 @@
-﻿/* Curate App Palette Alignment & Dual Theme Variables */
+﻿/* Base Light Theme (Default) */
 :root {
   --splash-bg: #f8fafc;
   --splash-text: #0f172a;
   --splash-text-muted: #64748b;
   --splash-accent: #0284c7;
-  --splash-accent-bright: #38bdf8;
-  --splash-glow-color: rgba(2, 132, 199, 0.25);
-  --splash-grid-line: rgba(2, 132, 199, 0.04);
-  --splash-diamond-outer: rgba(2, 132, 199, 0.2);
-  --splash-diamond-mid: rgba(2, 132, 199, 0.4);
-  --splash-neon-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(2, 132, 199, 0.2);
+  --splash-glow-color: rgba(2, 132, 199, 0.2);
+  --splash-grid-line: rgba(2, 132, 199, 0.05);
+  --splash-diamond-outer: rgba(2, 132, 199, 0.25);
+  --splash-diamond-mid: rgba(2, 132, 199, 0.5);
+  --splash-neon-shadow: 0 0 16px rgba(2, 132, 199, 0.4), 0 0 32px rgba(2, 132, 199, 0.2);
 }
 
+/* System Dark Theme Preference */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme="light"]):not(.light) {
     --splash-bg: #0b1319;
     --splash-text: #f8fafc;
     --splash-text-muted: #94a3b8;
     --splash-accent: #38bdf8;
-    --splash-accent-bright: #38bdf8;
     --splash-glow-color: rgba(56, 189, 248, 0.28);
-    --splash-grid-line: rgba(56, 189, 248, 0.03);
+    --splash-grid-line: rgba(56, 189, 248, 0.04);
     --splash-diamond-outer: rgba(56, 189, 248, 0.25);
     --splash-diamond-mid: rgba(56, 189, 248, 0.5);
-    --splash-neon-shadow: 0 0 15px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3);
+    --splash-neon-shadow: 0 0 18px rgba(56, 189, 248, 0.6), 0 0 36px rgba(56, 189, 248, 0.3);
   }
 }
 
-[data-theme="dark"] {
+/* Explicit Dark Mode Selectors (Handles Tailwind/Custom Theme Toggles) */
+[data-theme="dark"],
+.dark,
+.dark-mode {
   --splash-bg: #0b1319;
   --splash-text: #f8fafc;
   --splash-text-muted: #94a3b8;
   --splash-accent: #38bdf8;
-  --splash-accent-bright: #38bdf8;
   --splash-glow-color: rgba(56, 189, 248, 0.28);
-  --splash-grid-line: rgba(56, 189, 248, 0.03);
+  --splash-grid-line: rgba(56, 189, 248, 0.04);
   --splash-diamond-outer: rgba(56, 189, 248, 0.25);
   --splash-diamond-mid: rgba(56, 189, 248, 0.5);
-  --splash-neon-shadow: 0 0 15px rgba(56, 189, 248, 0.6), 0 0 30px rgba(56, 189, 248, 0.3);
+  --splash-neon-shadow: 0 0 18px rgba(56, 189, 248, 0.6), 0 0 36px rgba(56, 189, 248, 0.3);
 }
 
-[data-theme="light"] {
+/* Explicit Light Mode Override */
+[data-theme="light"],
+.light {
   --splash-bg: #f8fafc;
   --splash-text: #0f172a;
   --splash-text-muted: #64748b;
   --splash-accent: #0284c7;
-  --splash-accent-bright: #38bdf8;
-  --splash-glow-color: rgba(2, 132, 199, 0.25);
-  --splash-grid-line: rgba(2, 132, 199, 0.04);
-  --splash-diamond-outer: rgba(2, 132, 199, 0.2);
-  --splash-diamond-mid: rgba(2, 132, 199, 0.4);
-  --splash-neon-shadow: 0 0 12px rgba(2, 132, 199, 0.4), 0 0 24px rgba(2, 132, 199, 0.2);
+  --splash-glow-color: rgba(2, 132, 199, 0.2);
+  --splash-grid-line: rgba(2, 132, 199, 0.05);
+  --splash-diamond-outer: rgba(2, 132, 199, 0.25);
+  --splash-diamond-mid: rgba(2, 132, 199, 0.5);
+  --splash-neon-shadow: 0 0 16px rgba(2, 132, 199, 0.4), 0 0 32px rgba(2, 132, 199, 0.2);
 }
 
 .splash-screen {
@@ -62,7 +64,7 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
-  background-color: var(--splash-bg);
+  background-color: var(--splash-bg) !important;
   background-image: 
     radial-gradient(circle at 50% 45%, var(--splash-glow-color) 0%, transparent 65%),
     linear-gradient(to right, var(--splash-grid-line) 1px, transparent 1px),
@@ -82,14 +84,13 @@
   to { opacity: 1; }
 }
 
-/* Pulsing Ambient Radial Glow */
 .splash-glow {
   position: absolute;
   width: 480px;
   height: 480px;
   border-radius: 50%;
   background: radial-gradient(circle, var(--splash-glow-color) 0%, transparent 70%);
-  filter: blur(16px);
+  filter: blur(20px);
   animation: splashPulse 2.4s ease-in-out infinite;
   pointer-events: none;
 }
@@ -99,7 +100,6 @@
   50% { transform: scale(1.18); opacity: 0.95; }
 }
 
-/* SVG Diamond Logo Mark */
 .splash-mark {
   position: relative;
   display: flex;
@@ -112,7 +112,7 @@
 
 .splash-mark svg {
   display: block;
-  filter: drop-shadow(0 0 10px var(--splash-glow-color));
+  filter: drop-shadow(0 0 12px var(--splash-glow-color));
 }
 
 @keyframes splashMarkIn {
@@ -144,13 +144,12 @@
   50% { opacity: 0.75; }
 }
 
-/* Attractive Big Neon Text */
 .splash-name {
   position: relative;
   font-size: 3.2rem;
   font-weight: 900;
   letter-spacing: -0.03em;
-  color: var(--splash-text);
+  color: var(--splash-text) !important;
   text-shadow: var(--splash-neon-shadow);
   margin: 0;
   text-align: center;
@@ -161,7 +160,7 @@
   position: relative;
   font-size: 1.05rem;
   font-weight: 500;
-  color: var(--splash-text-muted);
+  color: var(--splash-text-muted) !important;
   margin: 0;
   text-align: center;
   letter-spacing: -0.01em;
@@ -173,7 +172,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Bouncing Cyan Dots */
 .splash-dots {
   position: relative;
   display: flex;
@@ -187,8 +185,8 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--splash-accent);
-  box-shadow: 0 0 8px var(--splash-accent);
+  background: var(--splash-accent) !important;
+  box-shadow: 0 0 10px var(--splash-accent);
   animation: splashDotBounce 1.2s ease-in-out infinite;
 }
 
