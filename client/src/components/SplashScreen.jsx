@@ -13,7 +13,6 @@ function SplashScreen(props) {
     var finishTimer = setTimeout(function () {
       if (onFinish) onFinish();
     }, 2300);
-
     return function () {
       clearTimeout(fadeTimer);
       clearTimeout(finishTimer);
