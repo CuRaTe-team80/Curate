@@ -1,12 +1,13 @@
 /* Base Light Theme Default */
 :root {
   --profile-bg: #f8fafc;
-  --profile-card-bg: #ffffff;
-  --profile-border: #e2e8f0;
+  --profile-card-bg: rgba(255, 255, 255, 0.85);
+  --profile-border: rgba(226, 232, 240, 0.8);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
+  --profile-pattern-opacity: 0.05;
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -15,16 +16,17 @@
   --profile-success-text: #065f46;
 }
 
-/* Dark Theme Support via Class/Attribute or OS Preference */
+/* Dark Theme Support via OS Preference */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --profile-bg: #0b1319;
-    --profile-card-bg: #15222b;
+    --profile-card-bg: rgba(21, 34, 43, 0.85);
     --profile-border: rgba(255, 255, 255, 0.12);
     --profile-text: #f5fbfb;
     --profile-text-muted: #8fb3b6;
     --profile-input-bg: #0d1a21;
     --profile-input-border: rgba(255, 255, 255, 0.18);
+    --profile-pattern-opacity: 0.04;
     --profile-error-bg: rgba(239, 68, 68, 0.18);
     --profile-error-border: #f87171;
     --profile-error-text: #fca5a5;
@@ -34,15 +36,16 @@
   }
 }
 
-/* Explicit class-based dark mode overrides (for theme toggles) */
+/* Explicit Theme Overrides */
 [data-theme="dark"] {
   --profile-bg: #0b1319;
-  --profile-card-bg: #15222b;
+  --profile-card-bg: rgba(21, 34, 43, 0.85);
   --profile-border: rgba(255, 255, 255, 0.12);
   --profile-text: #f5fbfb;
   --profile-text-muted: #8fb3b6;
   --profile-input-bg: #0d1a21;
   --profile-input-border: rgba(255, 255, 255, 0.18);
+  --profile-pattern-opacity: 0.04;
   --profile-error-bg: rgba(239, 68, 68, 0.18);
   --profile-error-border: #f87171;
   --profile-error-text: #fca5a5;
@@ -53,12 +56,13 @@
 
 [data-theme="light"] {
   --profile-bg: #f8fafc;
-  --profile-card-bg: #ffffff;
-  --profile-border: #e2e8f0;
+  --profile-card-bg: rgba(255, 255, 255, 0.85);
+  --profile-border: rgba(226, 232, 240, 0.8);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
+  --profile-pattern-opacity: 0.05;
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -67,26 +71,40 @@
   --profile-success-text: #065f46;
 }
 
-/* Page Layout */
+/* Page Layout with Doodle Pattern Overlay */
 .profile-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 80px);
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
   background-color: var(--color-bg, var(--profile-bg));
-  transition: background-color 0.2s ease, color 0.2s ease;
+  /* Professional SVG Doodle Pattern Overlay */
+  background-image: radial-gradient(circle at 15% 20%, rgba(14, 124, 134, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 85% 80%, rgba(14, 124, 134, 0.08) 0%, transparent 40%),
+                    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230e7c86' fill-opacity='0.12'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Glassmorphism Card Style */
 .profile-card {
+  position: relative;
   width: 100%;
   max-width: 480px;
-  padding: 1.75rem;
+  padding: 2rem;
   background-color: var(--color-bg-card, var(--profile-card-bg));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-border, var(--profile-border));
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.12), 0 6px 16px -2px rgba(0, 0, 0, 0.04);
 }
 
 .profile-title {
@@ -94,6 +112,7 @@
   font-weight: 700;
   color: var(--color-text-main, var(--profile-text));
   margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
 }
 
 .profile-info-grid {
@@ -111,7 +130,8 @@
 
 .profile-field-label {
   color: var(--color-text-muted, var(--profile-text-muted));
-  font-size: 0.875rem;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .profile-field-value {
@@ -131,6 +151,7 @@
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--color-text-main, var(--profile-text));
+  letter-spacing: -0.01em;
 }
 
 .profile-form {
@@ -154,24 +175,28 @@
 
 .profile-form .input {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 6px;
+  padding: 10px 14px;
+  border-radius: 8px;
   border: 1px solid var(--color-border, var(--profile-input-border));
   background-color: var(--color-bg-input, var(--profile-input-bg));
   color: var(--color-text-main, var(--profile-text));
   box-sizing: border-box;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-form .input:focus {
   outline: none;
   border-color: #0e7c86;
-  box-shadow: 0 0 0 2px rgba(14, 124, 134, 0.25);
+  box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.2);
 }
 
 .profile-submit {
   margin-top: 0.5rem;
   width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
 }
 
 /* Banners */
@@ -180,7 +205,7 @@
   border: 1px solid var(--profile-error-border);
   color: var(--profile-error-text);
   padding: 0.75rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 1rem;
   font-size: 0.875rem;
 }
@@ -190,7 +215,7 @@
   border: 1px solid var(--profile-success-border);
   color: var(--profile-success-text);
   padding: 0.75rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-bottom: 1rem;
   font-size: 0.875rem;
 }
