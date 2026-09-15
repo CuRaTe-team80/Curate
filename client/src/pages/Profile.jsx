@@ -81,40 +81,42 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="auth-page">
-        <p style={{ color: 'var(--color-text-muted)' }}>Loading profile...</p>
+      <div className="profile-container">
+        <p style={{ color: 'var(--color-text-muted)', textAlign: 'center' }}>Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="auth-page">
-      <div className="card auth-card" style={{ maxWidth: '480px' }}>
-        <h1 className="auth-title">Account Settings</h1>
+    <div className="profile-container">
+      <div className="card profile-card">
+        <h1 className="profile-title">Account Settings</h1>
 
         {fetchError ? (
-          <div className="auth-error-banner" role="alert">{fetchError}</div>
+          <div className="profile-error-banner" role="alert">{fetchError}</div>
         ) : (
-          <>
+          <div className="profile-info-grid">
             <div className="profile-field">
-              <p className="profile-field-label">Email</p>
-              <p className="profile-field-value">{user?.email}</p>
+              <span className="profile-field-label">Email</span>
+              <span className="profile-field-value">{user?.email}</span>
             </div>
 
             {user?.createdAt && (
               <div className="profile-field">
-                <p className="profile-field-label">Member since</p>
-                <p className="profile-field-value">
+                <span className="profile-field-label">Member since</span>
+                <span className="profile-field-value">
                   {new Date(user.createdAt).toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })}
-                </p>
+                </span>
               </div>
             )}
-          </>
+          </div>
         )}
+
+        <hr className="profile-divider" />
 
         <h2 className="profile-section-heading">Change Password</h2>
 
@@ -122,10 +124,10 @@ export default function Profile() {
           <div className="profile-success-banner">{passwordMessage}</div>
         )}
         {passwordError && (
-          <div className="auth-error-banner" role="alert">{passwordError}</div>
+          <div className="profile-error-banner" role="alert">{passwordError}</div>
         )}
 
-        <form onSubmit={handlePasswordSubmit} noValidate>
+        <form onSubmit={handlePasswordSubmit} noValidate className="profile-form">
           <div className="input-group">
             <label htmlFor="current-password">Current Password</label>
             <input
@@ -171,7 +173,7 @@ export default function Profile() {
             )}
           </div>
 
-          <button className="btn btn-primary auth-submit" type="submit" disabled={saving}>
+          <button className="btn btn-primary profile-submit" type="submit" disabled={saving}>
             {saving ? 'Updating...' : 'Update Password'}
           </button>
         </form>
