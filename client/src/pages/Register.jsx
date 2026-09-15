@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './authpages.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-export default function Register({ onSuccess }) {
+export default function Register({ onSuccess, onNavigate }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +14,6 @@ export default function Register({ onSuccess }) {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Calculate password strength score (0 to 4)
   const getPasswordStrength = (pass) => {
     let score = 0;
     if (pass.length >= 6) score++;
@@ -80,7 +79,7 @@ export default function Register({ onSuccess }) {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="brand-badge">⚡ LabelPro</div>
+          <div className="brand-badge">Curate</div>
           <h1 className="auth-title">Create an account</h1>
           <p className="auth-subtitle">Join the team and start labeling samples.</p>
         </div>
@@ -93,14 +92,13 @@ export default function Register({ onSuccess }) {
         )}
 
         <form onSubmit={handleSubmit} noValidate className="auth-form">
-          {/* Email Field */}
           <div className="input-group">
+            <label htmlFor="reg-email">Email address</label>
             <input
               id="reg-email"
               name="email"
               className={`input ${errors.email ? 'input-error' : ''}`}
               type="email"
-              placeholder=" "
               autoComplete="email"
               disabled={loading}
               value={email}
@@ -109,19 +107,17 @@ export default function Register({ onSuccess }) {
                 if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
               }}
             />
-            <label htmlFor="reg-email" className="floating-label">Email address</label>
             {errors.email && <span className="field-error">{errors.email}</span>}
           </div>
 
-          {/* Password Field */}
           <div className="input-group">
+            <label htmlFor="reg-password">Password</label>
             <div className="input-wrapper">
               <input
                 id="reg-password"
                 name="password"
                 className={`input ${errors.password ? 'input-error' : ''}`}
                 type={showPassword ? 'text' : 'password'}
-                placeholder=" "
                 autoComplete="new-password"
                 disabled={loading}
                 value={password}
@@ -130,7 +126,6 @@ export default function Register({ onSuccess }) {
                   if (errors.password) setErrors((prev) => ({ ...prev, password: null }));
                 }}
               />
-              <label htmlFor="reg-password" className="floating-label">Password</label>
               <button
                 type="button"
                 className="toggle-password"
@@ -142,7 +137,6 @@ export default function Register({ onSuccess }) {
             </div>
             {errors.password && <span className="field-error">{errors.password}</span>}
 
-            {/* Password Strength Meter */}
             {password && (
               <div className="strength-meter">
                 <div className="strength-bars">
@@ -158,14 +152,13 @@ export default function Register({ onSuccess }) {
             )}
           </div>
 
-          {/* Confirm Password Field */}
           <div className="input-group">
+            <label htmlFor="confirm-password">Confirm password</label>
             <input
               id="confirm-password"
               name="confirmPassword"
               className={`input ${errors.confirmPassword ? 'input-error' : ''}`}
               type={showPassword ? 'text' : 'password'}
-              placeholder=" "
               autoComplete="new-password"
               disabled={loading}
               value={confirmPassword}
@@ -174,17 +167,23 @@ export default function Register({ onSuccess }) {
                 if (errors.confirmPassword) setErrors((prev) => ({ ...prev, confirmPassword: null }));
               }}
             />
-            <label htmlFor="confirm-password" className="floating-label">Confirm password</label>
             {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
           </div>
 
           <button className="btn btn-primary auth-submit" type="submit" disabled={loading}>
-            {loading ? <span className="spinner"></span> : 'Get Started'}
+            {loading ? 'Creating account...' : 'Get Started'}
           </button>
         </form>
 
         <p className="auth-switch">
-          Already have an account? <a href="/login">Log in</a>
+          Already have an account?{' '}
+          <button 
+            type="button" 
+            className="auth-link-btn" 
+            onClick={() => onNavigate && onNavigate('login')}
+          >
+            Log in
+          </button>
         </p>
       </div>
     </div>
