@@ -30,6 +30,7 @@
   background: radial-gradient(circle, rgba(79, 208, 219, 0.25) 0%, transparent 70%);
   filter: blur(10px);
   animation: splashPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes splashPulse {
@@ -39,7 +40,16 @@
 
 .splash-mark {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
   animation: splashMarkIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.splash-mark svg {
+  display: block;
 }
 
 @keyframes splashMarkIn {
@@ -66,6 +76,7 @@
   letter-spacing: -0.02em;
   color: #f5fbfb;
   margin: 0;
+  text-align: center;
   animation: splashTextIn 0.6s ease 0.2s both;
 }
 
@@ -74,6 +85,7 @@
   font-size: 0.95rem;
   color: #8fb3b6;
   margin: 0;
+  text-align: center;
   animation: splashTextIn 0.6s ease 0.35s both;
 }
 
@@ -87,6 +99,7 @@
   display: flex;
   gap: 8px;
   margin-top: 8px;
+  justify-content: center;
   animation: splashTextIn 0.6s ease 0.5s both;
 }
 
