@@ -1,13 +1,15 @@
-/* Minimalist Circuit / Tech Node Variables */
+/* Curate App Palette Alignment */
 :root {
-  --circuit-node-color: %2310b981; /* Mint Green */
   --profile-bg: #f8fafc;
-  --profile-card-bg: rgba(255, 255, 255, 0.88);
-  --profile-border: rgba(16, 185, 129, 0.25);
+  --profile-card-bg: rgba(255, 255, 255, 0.9);
+  --profile-border: rgba(56, 189, 248, 0.25);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
+  --profile-accent: #0284c7;
+  --profile-accent-hover: #0369a1;
+  --profile-glow: rgba(2, 132, 199, 0.08);
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -16,16 +18,18 @@
   --profile-success-text: #065f46;
 }
 
-/* Dark Theme Support (OS & Manual Attribute) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --profile-bg: #0d1117;
-    --profile-card-bg: rgba(22, 27, 34, 0.85);
-    --profile-border: rgba(16, 185, 129, 0.2);
-    --profile-text: #f0f6fc;
-    --profile-text-muted: #8b949e;
-    --profile-input-bg: #161b22;
+    --profile-bg: #0b1319;
+    --profile-card-bg: rgba(15, 23, 42, 0.75);
+    --profile-border: rgba(56, 189, 248, 0.18);
+    --profile-text: #f8fafc;
+    --profile-text-muted: #94a3b8;
+    --profile-input-bg: #0f172a;
     --profile-input-border: rgba(255, 255, 255, 0.15);
+    --profile-accent: #38bdf8;
+    --profile-accent-hover: #0284c7;
+    --profile-glow: rgba(56, 189, 248, 0.12);
     --profile-error-bg: rgba(239, 68, 68, 0.18);
     --profile-error-border: #f87171;
     --profile-error-text: #fca5a5;
@@ -36,13 +40,16 @@
 }
 
 [data-theme="dark"] {
-  --profile-bg: #0d1117;
-  --profile-card-bg: rgba(22, 27, 34, 0.85);
-  --profile-border: rgba(16, 185, 129, 0.2);
-  --profile-text: #f0f6fc;
-  --profile-text-muted: #8b949e;
-  --profile-input-bg: #161b22;
+  --profile-bg: #0b1319;
+  --profile-card-bg: rgba(15, 23, 42, 0.75);
+  --profile-border: rgba(56, 189, 248, 0.18);
+  --profile-text: #f8fafc;
+  --profile-text-muted: #94a3b8;
+  --profile-input-bg: #0f172a;
   --profile-input-border: rgba(255, 255, 255, 0.15);
+  --profile-accent: #38bdf8;
+  --profile-accent-hover: #0284c7;
+  --profile-glow: rgba(56, 189, 248, 0.12);
   --profile-error-bg: rgba(239, 68, 68, 0.18);
   --profile-error-border: #f87171;
   --profile-error-text: #fca5a5;
@@ -53,12 +60,15 @@
 
 [data-theme="light"] {
   --profile-bg: #f8fafc;
-  --profile-card-bg: rgba(255, 255, 255, 0.88);
-  --profile-border: rgba(16, 185, 129, 0.25);
+  --profile-card-bg: rgba(255, 255, 255, 0.9);
+  --profile-border: rgba(56, 189, 248, 0.25);
   --profile-text: #0f172a;
   --profile-text-muted: #64748b;
   --profile-input-bg: #ffffff;
   --profile-input-border: #cbd5e1;
+  --profile-accent: #0284c7;
+  --profile-accent-hover: #0369a1;
+  --profile-glow: rgba(2, 132, 199, 0.08);
   --profile-error-bg: rgba(239, 68, 68, 0.1);
   --profile-error-border: #ef4444;
   --profile-error-text: #991b1b;
@@ -67,7 +77,7 @@
   --profile-success-text: #065f46;
 }
 
-/* Minimalist Circuit / Tech Node Overlay */
+/* Background Layout */
 .profile-container {
   position: relative;
   display: flex;
@@ -76,33 +86,34 @@
   min-height: calc(100vh - 80px);
   padding: 2.5rem 1rem;
   background-color: var(--profile-bg);
-  /* Tech Circuit Grid + Node Radial Glow */
+  /* Matching Radial Glows and Subtle Grid Overlay */
   background-image: 
-    radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%),
-    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2310b981' stroke-width='1' stroke-opacity='0.12'%3E%3Cpath d='M0 40h30l10 10h40M40 0v30l10 10v40'/%3E%3Ccircle cx='40' cy='40' r='3' fill='%2310b981' fill-opacity='0.2'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%2310b981' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 10% 20%, var(--profile-glow) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, var(--profile-glow) 0%, transparent 45%),
+    linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Glass Card with Tech Accent */
+/* Glass Card */
 .profile-card {
   position: relative;
   width: 100%;
   max-width: 480px;
   padding: 2rem;
   background-color: var(--profile-card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--profile-border);
   border-radius: 16px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(16, 185, 129, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .profile-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(16, 185, 129, 0.4);
-  box-shadow: 0 14px 35px -5px rgba(0, 0, 0, 0.15), 0 0 20px rgba(16, 185, 129, 0.1);
+  border-color: var(--profile-accent);
 }
 
 .profile-title {
@@ -185,8 +196,8 @@
 
 .profile-form .input:focus {
   outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  border-color: var(--profile-accent);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
 }
 
 .profile-submit {
@@ -195,7 +206,7 @@
   padding: 10px 16px;
   border-radius: 8px;
   font-weight: 600;
-  background-color: #10b981;
+  background-color: var(--profile-accent);
   color: #ffffff;
   border: none;
   cursor: pointer;
@@ -203,10 +214,9 @@
 }
 
 .profile-submit:hover {
-  background-color: #059669;
+  background-color: var(--profile-accent-hover);
 }
 
-/* Alert Banners */
 .profile-error-banner {
   background-color: var(--profile-error-bg);
   border: 1px solid var(--profile-error-border);

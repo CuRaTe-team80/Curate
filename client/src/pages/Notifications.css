@@ -1,43 +1,53 @@
-/* Minimalist Circuit / Tech Node Variables */
 :root {
   --notif-bg: #f8fafc;
-  --notif-card-bg: rgba(255, 255, 255, 0.88);
-  --notif-border: rgba(16, 185, 129, 0.22);
+  --notif-card-bg: rgba(255, 255, 255, 0.9);
+  --notif-border: rgba(56, 189, 248, 0.25);
   --notif-text: #0f172a;
   --notif-text-muted: #64748b;
+  --notif-accent: #0284c7;
+  --notif-accent-hover: #0369a1;
+  --notif-glow: rgba(2, 132, 199, 0.08);
   --notif-chip-bg: rgba(255, 255, 255, 0.8);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --notif-bg: #0d1117;
-    --notif-card-bg: rgba(22, 27, 34, 0.85);
-    --notif-border: rgba(16, 185, 129, 0.2);
-    --notif-text: #f0f6fc;
-    --notif-text-muted: #8b949e;
-    --notif-chip-bg: rgba(22, 27, 34, 0.7);
+    --notif-bg: #0b1319;
+    --notif-card-bg: rgba(15, 23, 42, 0.75);
+    --notif-border: rgba(56, 189, 248, 0.18);
+    --notif-text: #f8fafc;
+    --notif-text-muted: #94a3b8;
+    --notif-accent: #38bdf8;
+    --notif-accent-hover: #0284c7;
+    --notif-glow: rgba(56, 189, 248, 0.12);
+    --notif-chip-bg: rgba(15, 23, 42, 0.7);
   }
 }
 
 [data-theme="dark"] {
-  --notif-bg: #0d1117;
-  --notif-card-bg: rgba(22, 27, 34, 0.85);
-  --notif-border: rgba(16, 185, 129, 0.2);
-  --notif-text: #f0f6fc;
-  --notif-text-muted: #8b949e;
-  --notif-chip-bg: rgba(22, 27, 34, 0.7);
+  --notif-bg: #0b1319;
+  --notif-card-bg: rgba(15, 23, 42, 0.75);
+  --notif-border: rgba(56, 189, 248, 0.18);
+  --notif-text: #f8fafc;
+  --notif-text-muted: #94a3b8;
+  --notif-accent: #38bdf8;
+  --notif-accent-hover: #0284c7;
+  --notif-glow: rgba(56, 189, 248, 0.12);
+  --notif-chip-bg: rgba(15, 23, 42, 0.7);
 }
 
 [data-theme="light"] {
   --notif-bg: #f8fafc;
-  --notif-card-bg: rgba(255, 255, 255, 0.88);
-  --notif-border: rgba(16, 185, 129, 0.22);
+  --notif-card-bg: rgba(255, 255, 255, 0.9);
+  --notif-border: rgba(56, 189, 248, 0.25);
   --notif-text: #0f172a;
   --notif-text-muted: #64748b;
+  --notif-accent: #0284c7;
+  --notif-accent-hover: #0369a1;
+  --notif-glow: rgba(2, 132, 199, 0.08);
   --notif-chip-bg: rgba(255, 255, 255, 0.8);
 }
 
-/* Page Layout & Background Pattern */
 .notifications-wrapper {
   position: relative;
   min-height: calc(100vh - 80px);
@@ -45,11 +55,13 @@
   padding: 2.5rem 1rem;
   box-sizing: border-box;
   background-color: var(--notif-bg);
-  /* Connected Circuit Nodes Pattern */
+  /* Matching Radial Glows and Subtle Grid Overlay */
   background-image: 
-    radial-gradient(circle at 15% 25%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.06) 0%, transparent 45%),
-    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2310b981' stroke-width='1' stroke-opacity='0.12'%3E%3Cpath d='M0 40h30l10 10h40M40 0v30l10 10v40'/%3E%3Ccircle cx='40' cy='40' r='3' fill='%2310b981' fill-opacity='0.2'/%3E%3Ccircle cx='70' cy='50' r='2' fill='%2310b981' fill-opacity='0.25'/%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 10% 20%, var(--notif-glow) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, var(--notif-glow) 0%, transparent 45%),
+    linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
   transition: background-color 0.3s ease;
 }
 
@@ -58,7 +70,6 @@
   margin: 0 auto;
 }
 
-/* Header */
 .notifications-header {
   display: flex;
   align-items: flex-end;
@@ -69,7 +80,7 @@
 
 .notifications-eyebrow {
   margin-bottom: 0.25rem;
-  color: #10b981;
+  color: var(--notif-accent);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -110,7 +121,6 @@
   background: rgba(239, 68, 68, 0.08);
 }
 
-/* Tech Filter Chips */
 .notifications-filters {
   display: flex;
   gap: 0.5rem;
@@ -133,13 +143,13 @@
 }
 
 .filter-chip:hover {
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(56, 189, 248, 0.12);
   color: var(--notif-text);
 }
 
 .filter-chip.active {
-  background: #10b981;
-  border-color: #10b981;
+  background: var(--notif-accent);
+  border-color: var(--notif-accent);
   color: #ffffff;
 }
 
@@ -150,7 +160,6 @@
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* Circuit Glass Card Feed */
 .notifications-feed {
   max-height: 580px;
   overflow-y: auto;
@@ -159,7 +168,7 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--notif-border);
   border-radius: 16px;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 0 15px rgba(16, 185, 129, 0.04);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.12);
 }
 
 .notifications-feed::-webkit-scrollbar {
@@ -171,7 +180,6 @@
   border-radius: 999px;
 }
 
-/* Feed List Items */
 .activity-item {
   display: flex;
   align-items: center;
@@ -186,7 +194,7 @@
 }
 
 .activity-item:hover {
-  background: rgba(16, 185, 129, 0.06);
+  background: rgba(56, 189, 248, 0.06);
 }
 
 .activity-icon {
@@ -196,9 +204,9 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #10b981;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--notif-accent);
 }
 
 .activity-item--error .activity-icon {
@@ -234,11 +242,10 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #10b981;
+  background-color: var(--notif-accent);
   flex-shrink: 0;
 }
 
-/* Empty State Illustration */
 .notifications-empty {
   display: flex;
   min-height: 320px;
@@ -259,7 +266,7 @@
   position: absolute;
   inset: -8px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--notif-glow) 0%, transparent 70%);
 }
 
 .notifications-empty-icon {
@@ -268,9 +275,9 @@
   height: 60px;
   place-items: center;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #10b981;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--notif-accent);
 }
 
 .notifications-empty h2 {
@@ -285,7 +292,6 @@
   font-size: 0.9rem;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .notifications-wrapper {
     padding: 1.5rem 0.5rem;
